@@ -28,17 +28,17 @@ export class ModularDiagnosticEngine {
       currentQuestionIndex: 0,
       getNextQuestion: () => null,
       getProgress: () => ({ current: 0, total: 0, percentage: 0 }),
-      answerQuestion: (__answer: any) => {},
+      answerQuestion: () => {},
       getResults: () => ({}),
       getAllResponses: () => ({}),
-      processAnswer: (__questionId: string, selectedOptionIndex: number, __textAnswer?: string, matrixAnswers?: any) => 'continue'
+      processAnswer: () => 'continue'
     };
     
     this.sessions.set(session.id, session);
     return session;
   }
 
-  startDiagnostic(module: any, sessionId: string): DiagnosticSession | null {
+  startDiagnostic(module: any): DiagnosticSession | null {
     return this.createSession(module.id);
   }
 

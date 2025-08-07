@@ -4,6 +4,8 @@
  * Durée cible: 5 minutes
  */
 
+import { DiagnosticResult, RecommendedDiagnostic } from './diagnostic-types';
+
 export interface DiagnosticQuestion {
   id: string;
   category: string;
@@ -12,40 +14,38 @@ export interface DiagnosticQuestion {
   priority: 'high' | 'medium' | 'low';
   isFollowUp?: boolean;
   parentQuestionId?: string;
+  followUpLevel?: number; // 1, 2, 3 pour questions en cascade
 }
 
 export interface DiagnosticOption {
   text: string;
-  score: number; // 1-5
+  score: number; // 1-5 (interne seulement)
   action: 'continue' | 'skip_category' | 'deep_dive';
+  triggersFollowUp?: string[]; // IDs des questions de suivi à déclencher
 }
 
-export interface DiagnosticResult {
-  sessionId: string;
+// Interface publique pour le côté client (sans les scores)
+export interface PublicDiagnosticOption {
+  text: string;
+  // Le score est délibérément omis pour ne pas influencer le client
+}
+
+export interface PublicDiagnosticQuestion {
+  id: string;
+  category: string;
+  question: string;
+  options: PublicDiagnosticOption[];
+  priority: 'high' | 'medium' | 'low';
+  isFollowUp?: boolean;
+  parentQuestionId?: string;
+  followUpLevel?: number;
+}
+
+export interface DiagnosticAnswer {
+  question: DiagnosticQuestion;
+  option: DiagnosticOption;
   timestamp: Date;
-  categoryScores: Record<string, {
-    score: number;
-    maxScore: number;
-    percentage: number;
-    level: 'faible' | 'moyen' | 'bon' | 'excellent';
-  }>;
-  overallScore: number;
-  overallPercentage: number;
-  overallLevel: 'débutant' | 'intermédiaire' | 'avancé' | 'expert';
-  strengths: string[];
-  weaknesses: string[];
-  recommendedDiagnostics: Array<{
-    id: string;
-    name: string;
-    priority: 'urgent' | 'important' | 'utile';
-    reason: string;
-  }>;
-  insights: string;
-  recommendations: string[];
-  nextSteps: string[];
-}
-
-// Questions d'orientation adaptatives en français - Version étendue avec questions approfondies
+}// Questions d'orientation adaptatives en français - Version étendue avec questions approfondies
 export const orientationQuestions: DiagnosticQuestion[] = [
   // ===========================================
   // 1. ENGAGEMENT DIRECTION & STRATÉGIE
@@ -135,6 +135,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - STRATÉGIE
+  {
+    id: 'strategy_budget_constraints',
+    category: 'Engagement Direction & Stratégie',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'strategy_resources',
+    question: "Quels sont les principaux obstacles budgétaires que vous rencontrez ?",
+    options: [
+      { text: "Budget achats non défini ou inexistant", score: 1, action: 'deep_dive', triggersFollowUp: ['strategy_impact_budget'] },
+      { text: "Budget figé, aucune flexibilité pour les projets d'amélioration", score: 2, action: 'continue' },
+      { text: "Budget limité mais quelques marges de manœuvre", score: 3, action: 'continue' },
+      { text: "Budget adapté avec possibilité d'investissements ponctuels", score: 4, action: 'continue' },
+      { text: "Budget stratégique avec enveloppe dédiée à l'innovation", score: 5, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'strategy_impact_budget',
+    category: 'Engagement Direction & Stratégie',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'strategy_budget_constraints',
+    question: "Comment cette contrainte budgétaire impacte-t-elle concrètement votre fonction achats ?",
+    options: [
+      { text: "Impossibilité de recruter ou former les équipes", score: 1, action: 'continue' },
+      { text: "Pas d'outils digitaux, processus manuels obligatoires", score: 1, action: 'continue' },
+      { text: "Projets d'amélioration systématiquement reportés", score: 2, action: 'continue' },
+      { text: "Difficult à justifier les investissements achats", score: 2, action: 'continue' },
+      { text: "Impact modéré, quelques projets peuvent être menés", score: 3, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'strategy_communication_issues',
+    category: 'Engagement Direction & Stratégie',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'strategy_mission_vision',
+    question: "Pourquoi la mission/vision achats n'est-elle pas suffisamment communiquée ?",
+    options: [
+      { text: "Direction pas convaincue de l'importance des achats", score: 1, action: 'continue' },
+      { text: "Manque de temps/ressources pour la communication interne", score: 2, action: 'continue' },
+      { text: "Résistance au changement des équipes métiers", score: 2, action: 'continue' },
+      { text: "Stratégie achats pas alignée avec la stratégie globale", score: 1, action: 'continue' },
+      { text: "Outils de communication internes insuffisants", score: 3, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 2. RELATIONS PARTENAIRES INTERNES
   // ===========================================
@@ -202,6 +254,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "SLA basiques documentés mais peu suivis", score: 3, action: 'continue' },
       { text: "SLA détaillés avec suivi de performance", score: 4, action: 'continue' },
       { text: "SLA sophistiqués avec amélioration continue", score: 5, action: 'continue' }
+    ]
+  },
+
+  // Questions de creusement niveau 2 - RELATIONS INTERNES
+  {
+    id: 'internal_conflict_sources',
+    category: 'Relations avec Partenaires Internes',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'internal_partners_main',
+    question: "Quelles sont les principales sources de conflit avec vos clients internes ?",
+    options: [
+      { text: "Délais d'approvisionnement trop longs selon les métiers", score: 1, action: 'deep_dive', triggersFollowUp: ['internal_delay_impact'] },
+      { text: "Processus achats perçus comme trop complexes/rigides", score: 2, action: 'continue' },
+      { text: "Manque de transparence sur les décisions fournisseurs", score: 2, action: 'continue' },
+      { text: "Incompréhension des contraintes métiers par les achats", score: 1, action: 'continue' },
+      { text: "Objectifs contradictoires (coût vs qualité/délais)", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'internal_delay_impact',
+    category: 'Relations avec Partenaires Internes',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'internal_conflict_sources',
+    question: "Quel impact ont ces délais sur l'activité de vos clients internes ?",
+    options: [
+      { text: "Arrêt de production ou retards projets critiques", score: 1, action: 'continue' },
+      { text: "Perte de chiffre d'affaires ou clients mécontents", score: 1, action: 'continue' },
+      { text: "Stress important et dégradation du climat", score: 2, action: 'continue' },
+      { text: "Gêne occasionnelle mais pas d'impact majeur", score: 3, action: 'continue' },
+      { text: "Impact limité grâce à l'anticipation", score: 4, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'internal_collaboration_barriers',
+    category: 'Relations avec Partenaires Internes',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'internal_communication',
+    question: "Quels sont les principaux freins à une meilleure collaboration ?",
+    options: [
+      { text: "Silos organisationnels forts, peu d'échanges transverses", score: 1, action: 'continue' },
+      { text: "Manque de temps pour développer les relations", score: 2, action: 'continue' },
+      { text: "Cultures métiers très différentes (technique vs achats)", score: 2, action: 'continue' },
+      { text: "Pas d'outils collaboratifs partagés", score: 3, action: 'continue' },
+      { text: "Objectifs individuels non alignés entre services", score: 2, action: 'continue' }
     ]
   },
 
@@ -275,6 +379,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - CATÉGORIES
+  {
+    id: 'category_segmentation_challenges',
+    category: 'Gestion par Catégories',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'category_management_main',
+    question: "Quels défis rencontrez-vous dans la segmentation de vos achats ?",
+    options: [
+      { text: "Données achats incomplètes ou de mauvaise qualité", score: 1, action: 'deep_dive', triggersFollowUp: ['category_data_quality'] },
+      { text: "Portefeuille achats trop complexe ou hétérogène", score: 2, action: 'continue' },
+      { text: "Manque de ressources pour analyser toutes les catégories", score: 2, action: 'continue' },
+      { text: "Résistance des équipes à changer leurs habitudes", score: 2, action: 'continue' },
+      { text: "Difficulté à définir des stratégies différenciées", score: 3, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'category_data_quality',
+    category: 'Gestion par Catégories',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'category_segmentation_challenges',
+    question: "En quoi la qualité des données impacte-t-elle votre gestion des catégories ?",
+    options: [
+      { text: "Impossible de faire des analyses fiables", score: 1, action: 'continue' },
+      { text: "Décisions basées sur des approximations", score: 2, action: 'continue' },
+      { text: "Temps excessif passé à nettoyer les données", score: 2, action: 'continue' },
+      { text: "Manque de visibilité sur les opportunités", score: 2, action: 'continue' },
+      { text: "Difficulté à justifier les stratégies catégorielles", score: 3, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'category_expertise_gaps',
+    category: 'Gestion par Catégories',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'category_strategies',
+    question: "Quelles compétences vous manquent pour développer de meilleures stratégies catégorielles ?",
+    options: [
+      { text: "Connaissance technique approfondie des produits/services", score: 2, action: 'continue' },
+      { text: "Analyse marché et intelligence économique", score: 2, action: 'continue' },
+      { text: "Méthodes de segmentation et analyse portefeuille", score: 1, action: 'continue' },
+      { text: "Négociation avancée et gestion relationnelle", score: 3, action: 'continue' },
+      { text: "Outils digitaux et analyse de données", score: 2, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 4. COLLABORATION ET INNOVATION FOURNISSEURS
   // ===========================================
@@ -342,6 +498,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "Communauté fournisseurs avec événements réguliers", score: 3, action: 'continue' },
       { text: "Écosystème actif avec plateformes d'échange", score: 4, action: 'continue' },
       { text: "Orchestration d'écosystèmes innovants multi-acteurs", score: 5, action: 'continue' }
+    ]
+  },
+
+  // Questions de creusement niveau 2 - INNOVATION FOURNISSEURS
+  {
+    id: 'supplier_innovation_barriers',
+    category: 'Collaboration et Innovation Fournisseurs',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'supplier_innovation_main',
+    question: "Quels sont les principaux freins à l'innovation collaborative avec vos fournisseurs ?",
+    options: [
+      { text: "Fournisseurs peu innovants ou traditionnels", score: 1, action: 'continue' },
+      { text: "Manque de temps/ressources pour développer l'innovation", score: 2, action: 'deep_dive', triggersFollowUp: ['supplier_resource_constraints'] },
+      { text: "Crainte de partager des informations confidentielles", score: 2, action: 'continue' },
+      { text: "Processus d'innovation non structurés", score: 2, action: 'continue' },
+      { text: "Résistance interne au changement", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'supplier_resource_constraints',
+    category: 'Collaboration et Innovation Fournisseurs',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'supplier_innovation_barriers',
+    question: "Comment ce manque de ressources impacte-t-il vos projets d'innovation ?",
+    options: [
+      { text: "Projets d'innovation systématiquement abandonnés", score: 1, action: 'continue' },
+      { text: "Innovation limitée aux urgences business", score: 2, action: 'continue' },
+      { text: "Délais d'innovation très longs", score: 2, action: 'continue' },
+      { text: "Qualité des projets d'innovation insuffisante", score: 2, action: 'continue' },
+      { text: "Perte d'opportunités concurrentielles", score: 1, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'supplier_selection_innovation',
+    category: 'Collaboration et Innovation Fournisseurs',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'supplier_early_involvement',
+    question: "Comment identifiez-vous les fournisseurs à potentiel d'innovation ?",
+    options: [
+      { text: "Aucun critère d'innovation dans la sélection", score: 1, action: 'continue' },
+      { text: "Evaluation informelle des capacités d'innovation", score: 2, action: 'continue' },
+      { text: "Grille d'évaluation incluant des critères d'innovation", score: 3, action: 'continue' },
+      { text: "Due diligence innovation systématique", score: 4, action: 'continue' },
+      { text: "Scouting innovation proactif et veille technologique", score: 5, action: 'continue' }
     ]
   },
 
@@ -415,6 +623,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - ORGANISATION ET PROCESSUS
+  {
+    id: 'organization_maturity_gaps',
+    category: 'Organisation et Processus',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'organization_processes_main',
+    question: "Quels sont les principaux défis organisationnels de votre fonction achats ?",
+    options: [
+      { text: "Manque de clarté sur les rôles et responsabilités", score: 1, action: 'deep_dive', triggersFollowUp: ['organization_role_clarity'] },
+      { text: "Processus trop longs et bureaucratiques", score: 2, action: 'continue' },
+      { text: "Coordination difficile entre les équipes achats", score: 2, action: 'continue' },
+      { text: "Résistance au changement des équipes", score: 2, action: 'continue' },
+      { text: "Manque d'outils pour supporter les processus", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'organization_role_clarity',
+    category: 'Organisation et Processus',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'organization_maturity_gaps',
+    question: "Comment ce manque de clarté impacte-t-il votre efficacité ?",
+    options: [
+      { text: "Doublons de travail et conflits entre équipes", score: 1, action: 'continue' },
+      { text: "Perte de temps en coordination et arbitrages", score: 2, action: 'continue' },
+      { text: "Qualité des livrables dégradée", score: 2, action: 'continue' },
+      { text: "Démotivation et frustration des équipes", score: 2, action: 'continue' },
+      { text: "Clients internes insatisfaits", score: 1, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'process_documentation_gaps',
+    category: 'Organisation et Processus',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'process_standardization',
+    question: "Pourquoi vos processus ne sont-ils pas suffisamment documentés ?",
+    options: [
+      { text: "Manque de temps pour formaliser les processus", score: 2, action: 'continue' },
+      { text: "Processus trop variables selon les situations", score: 2, action: 'continue' },
+      { text: "Pas de méthodologie de documentation", score: 1, action: 'continue' },
+      { text: "Résistance des équipes à la formalisation", score: 2, action: 'continue' },
+      { text: "Changements trop fréquents pour documenter", score: 3, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 6. GESTION DES CONTRATS
   // ===========================================
@@ -482,6 +742,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "Mesure de la valeur sur contrats stratégiques", score: 3, action: 'continue' },
       { text: "Analytics avancés sur performance contractuelle", score: 4, action: 'continue' },
       { text: "Optimisation continue avec IA prédictive", score: 5, action: 'continue' }
+    ]
+  },
+
+  // Questions de creusement niveau 2 - GESTION DES CONTRATS
+  {
+    id: 'contract_management_challenges',
+    category: 'Gestion des Contrats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'contract_management_main',
+    question: "Quels sont vos principaux défis en gestion contractuelle ?",
+    options: [
+      { text: "Contrats stockés dans différents endroits, difficiles à retrouver", score: 1, action: 'deep_dive', triggersFollowUp: ['contract_visibility_impact'] },
+      { text: "Dates d'échéance manquées, renouvellements automatiques subis", score: 1, action: 'continue' },
+      { text: "Négociations contractuelles trop longues", score: 2, action: 'continue' },
+      { text: "Clauses contractuelles mal comprises ou non appliquées", score: 2, action: 'continue' },
+      { text: "Manque de templates et standardisation", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'contract_visibility_impact',
+    category: 'Gestion des Contrats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'contract_management_challenges',
+    question: "Quel impact a ce manque de visibilité sur vos contrats ?",
+    options: [
+      { text: "Perte d'opportunités de renégociation", score: 1, action: 'continue' },
+      { text: "Risques juridiques et non-conformité", score: 1, action: 'continue' },
+      { text: "Surcoûts dus aux renouvellements automatiques", score: 2, action: 'continue' },
+      { text: "Temps excessif passé à rechercher l'information", score: 2, action: 'continue' },
+      { text: "Difficultés à répondre aux audits", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'contract_negotiation_skills',
+    category: 'Gestion des Contrats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'contract_compliance',
+    question: "Quelles compétences contractuelles manquent à vos équipes ?",
+    options: [
+      { text: "Rédaction et analyse juridique des clauses", score: 2, action: 'continue' },
+      { text: "Négociation contractuelle avancée", score: 2, action: 'continue' },
+      { text: "Gestion des risques contractuels", score: 2, action: 'continue' },
+      { text: "Utilisation d'outils CLM", score: 3, action: 'continue' },
+      { text: "Analyse de la performance contractuelle", score: 3, action: 'continue' }
     ]
   },
 
@@ -555,6 +867,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - SOURCING STRATÉGIQUE
+  {
+    id: 'sourcing_methodology_gaps',
+    category: 'Sourcing Stratégique',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'strategic_sourcing_main',
+    question: "Quels sont vos principaux défis méthodologiques en sourcing ?",
+    options: [
+      { text: "Manque de méthodes structurées de sourcing", score: 1, action: 'deep_dive', triggersFollowUp: ['sourcing_method_impact'] },
+      { text: "Analyses marché insuffisantes avant sourcing", score: 2, action: 'continue' },
+      { text: "Évaluation fournisseurs non standardisée", score: 2, action: 'continue' },
+      { text: "Processus de négociation non optimisés", score: 2, action: 'continue' },
+      { text: "Manque d'outils pour le sourcing digital", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'sourcing_method_impact',
+    category: 'Sourcing Stratégique',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'sourcing_methodology_gaps',
+    question: "Comment ce manque de méthodes impacte-t-il vos résultats ?",
+    options: [
+      { text: "Opportunités d'économies manquées", score: 1, action: 'continue' },
+      { text: "Sélection de fournisseurs sous-optimale", score: 2, action: 'continue' },
+      { text: "Processus sourcing trop longs", score: 2, action: 'continue' },
+      { text: "Résultats de négociation décevants", score: 2, action: 'continue' },
+      { text: "Difficultés à justifier les décisions", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'sourcing_market_analysis',
+    category: 'Sourcing Stratégique',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'sourcing_analysis',
+    question: "Pourquoi ne réalisez-vous pas d'analyses TCO approfondies ?",
+    options: [
+      { text: "Manque de temps pour des analyses complexes", score: 2, action: 'continue' },
+      { text: "Données coûts indirects difficiles à obtenir", score: 2, action: 'continue' },
+      { text: "Compétences en modélisation coûts insuffisantes", score: 1, action: 'continue' },
+      { text: "Pression pour des décisions rapides", score: 2, action: 'continue' },
+      { text: "Outils d'analyse TCO non disponibles", score: 2, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 8. GESTION DES RISQUES
   // ===========================================
@@ -622,6 +986,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "Plans de continuité documentés et testés", score: 3, action: 'continue' },
       { text: "BCP complets avec suppliers de backup", score: 4, action: 'continue' },
       { text: "Résilience avancée avec redondance intelligente", score: 5, action: 'continue' }
+    ]
+  },
+
+  // Questions de creusement niveau 2 - GESTION DES RISQUES
+  {
+    id: 'risk_identification_challenges',
+    category: 'Gestion des Risques',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'risk_management_main',
+    question: "Quels types de risques achats vous préoccupent le plus ?",
+    options: [
+      { text: "Risques de rupture d'approvisionnement", score: 1, action: 'deep_dive', triggersFollowUp: ['risk_supply_disruption'] },
+      { text: "Risques financiers fournisseurs (défaillance)", score: 1, action: 'continue' },
+      { text: "Risques de qualité et non-conformité", score: 2, action: 'continue' },
+      { text: "Risques cyber et sécurité des données", score: 2, action: 'continue' },
+      { text: "Risques ESG et réputation", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'risk_supply_disruption',
+    category: 'Gestion des Risques',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'risk_identification_challenges',
+    question: "Comment ces ruptures d'approvisionnement impactent-elles votre activité ?",
+    options: [
+      { text: "Arrêt de production avec impact client majeur", score: 1, action: 'continue' },
+      { text: "Surcoûts importants pour solutions de secours", score: 1, action: 'continue' },
+      { text: "Retards projet et pénalités contractuelles", score: 2, action: 'continue' },
+      { text: "Stress et management de crise", score: 2, action: 'continue' },
+      { text: "Impact limité grâce aux plans de secours", score: 4, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'risk_monitoring_gaps',
+    category: 'Gestion des Risques',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'supplier_risk_assessment',
+    question: "Pourquoi n'évaluez-vous pas systématiquement les risques fournisseurs ?",
+    options: [
+      { text: "Manque de ressources et temps pour les évaluations", score: 2, action: 'continue' },
+      { text: "Pas de méthodologie d'évaluation des risques", score: 1, action: 'continue' },
+      { text: "Difficultés à obtenir les informations fournisseurs", score: 2, action: 'continue' },
+      { text: "Coût des évaluations jugé trop élevé", score: 2, action: 'continue' },
+      { text: "Priorisation sur les fournisseurs critiques uniquement", score: 3, action: 'continue' }
     ]
   },
 
@@ -711,6 +1127,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - GESTION DES TALENTS
+  {
+    id: 'talent_development_obstacles',
+    category: 'Gestion des Talents',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'talent_management_main',
+    question: "Quels sont les principaux obstacles au développement de vos équipes ?",
+    options: [
+      { text: "Budget formation insuffisant ou inexistant", score: 1, action: 'deep_dive', triggersFollowUp: ['talent_budget_impact'] },
+      { text: "Manque de temps pour la formation (charge de travail)", score: 2, action: 'continue' },
+      { text: "Offre de formation inadaptée aux besoins achats", score: 2, action: 'continue' },
+      { text: "Résistance des équipes à la formation", score: 2, action: 'continue' },
+      { text: "Pas de plan de développement structuré", score: 1, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'talent_budget_impact',
+    category: 'Gestion des Talents',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'talent_development_obstacles',
+    question: "Comment ce manque de budget formation impacte-t-il vos équipes ?",
+    options: [
+      { text: "Compétences achats obsolètes vs marché", score: 1, action: 'continue' },
+      { text: "Démotivation et turn-over élevé", score: 1, action: 'continue' },
+      { text: "Performance achats dégradée", score: 2, action: 'continue' },
+      { text: "Difficultés à recruter de bons profils", score: 2, action: 'continue' },
+      { text: "Dépendance excessive à quelques experts", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'talent_retention_challenges',
+    category: 'Gestion des Talents',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'career_development',
+    question: "Pourquoi avez-vous des difficultés à retenir vos talents achats ?",
+    options: [
+      { text: "Rémunération non compétitive vs marché", score: 2, action: 'continue' },
+      { text: "Fonction achats peu valorisée dans l'entreprise", score: 1, action: 'continue' },
+      { text: "Manque de perspectives d'évolution", score: 1, action: 'continue' },
+      { text: "Charge de travail excessive et stress", score: 2, action: 'continue' },
+      { text: "Environnement de travail peu stimulant", score: 2, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 10. ACHATS RESPONSABLES & DÉVELOPPEMENT DURABLE
   // ===========================================
@@ -778,6 +1246,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "Critères sociaux de base demandés aux fournisseurs (conformité légale)", score: 3, action: 'continue' },
       { text: "Évaluations RSE régulières des fournisseurs clés, plans d'action suivis", score: 4, action: 'continue' },
       { text: "Excellence sociale : audits éthiques, encouragement de la diversité, programmes de bien-être dans la supply chain", score: 5, action: 'continue' }
+    ]
+  },
+
+  // Questions de creusement niveau 2 - ACHATS RESPONSABLES
+  {
+    id: 'sustainable_barriers',
+    category: 'Achats Responsables',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'sustainable_main',
+    question: "Quels sont les principaux freins à l'intégration du développement durable ?",
+    options: [
+      { text: "Coûts supplémentaires perçus pour les solutions durables", score: 2, action: 'deep_dive', triggersFollowUp: ['sustainable_cost_perception'] },
+      { text: "Manque de sensibilisation et formation des équipes", score: 2, action: 'continue' },
+      { text: "Difficulté à mesurer l'impact ESG", score: 2, action: 'continue' },
+      { text: "Pression court terme vs investissements durables", score: 2, action: 'continue' },
+      { text: "Offre fournisseurs durables limitée", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'sustainable_cost_perception',
+    category: 'Achats Responsables',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'sustainable_barriers',
+    question: "Comment gérez-vous l'équilibre coût vs durabilité ?",
+    options: [
+      { text: "Priorité absolue au coût, durabilité secondaire", score: 1, action: 'continue' },
+      { text: "Durabilité acceptée si pas de surcoût", score: 2, action: 'continue' },
+      { text: "Analyse TCO incluant les bénéfices durables", score: 3, action: 'continue' },
+      { text: "Investissement durable justifié par la stratégie", score: 4, action: 'continue' },
+      { text: "Solutions durables créent de la valeur économique", score: 5, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'sustainable_measurement_gaps',
+    category: 'Achats Responsables',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'sustainable_environment',
+    question: "Pourquoi ne mesurez-vous pas l'impact environnemental de vos achats ?",
+    options: [
+      { text: "Pas d'outils de mesure disponibles", score: 2, action: 'continue' },
+      { text: "Données environnementales difficiles à obtenir", score: 2, action: 'continue' },
+      { text: "Manque de compétences en analyse ESG", score: 1, action: 'continue' },
+      { text: "Priorité donnée à d'autres indicateurs", score: 2, action: 'continue' },
+      { text: "ROI de la mesure environnementale incertain", score: 2, action: 'continue' }
     ]
   },
 
@@ -851,6 +1371,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
     ]
   },
 
+  // Questions de creusement niveau 2 - DIGITALISATION
+  {
+    id: 'digital_transformation_barriers',
+    category: 'Digitalisation des Achats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'digital_main',
+    question: "Quels sont les principaux obstacles à votre transformation digitale ?",
+    options: [
+      { text: "Budget insuffisant pour l'investissement digital", score: 2, action: 'deep_dive', triggersFollowUp: ['digital_budget_priorities'] },
+      { text: "Résistance au changement des équipes", score: 2, action: 'continue' },
+      { text: "Manque de compétences digitales", score: 1, action: 'continue' },
+      { text: "Systèmes legacy difficiles à faire évoluer", score: 2, action: 'continue' },
+      { text: "Manque de sponsor/champion digital", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'digital_budget_priorities',
+    category: 'Digitalisation des Achats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'digital_transformation_barriers',
+    question: "Comment priorisez-vous vos investissements digitaux limités ?",
+    options: [
+      { text: "Aucune priorisation, projets au cas par cas", score: 1, action: 'continue' },
+      { text: "Focus sur les outils de base (ERP, e-sourcing)", score: 2, action: 'continue' },
+      { text: "ROI court terme privilégié", score: 3, action: 'continue' },
+      { text: "Stratégie digital achats structurée", score: 4, action: 'continue' },
+      { text: "Innovation digital comme avantage concurrentiel", score: 5, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'digital_skills_gaps',
+    category: 'Digitalisation des Achats',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'digital_data',
+    question: "Quelles compétences digitales manquent à vos équipes achats ?",
+    options: [
+      { text: "Analyse de données et Business Intelligence", score: 2, action: 'continue' },
+      { text: "Utilisation d'outils digitaux avancés", score: 2, action: 'continue' },
+      { text: "Compréhension des nouvelles technologies (IA, RPA)", score: 1, action: 'continue' },
+      { text: "Gestion de projet digital", score: 3, action: 'continue' },
+      { text: "Change management digital", score: 3, action: 'continue' }
+    ]
+  },
+
   // ===========================================
   // 12. GESTION DE LA PERFORMANCE
   // ===========================================
@@ -919,6 +1491,58 @@ export const orientationQuestions: DiagnosticQuestion[] = [
       { text: "Revues de performance mensuelles avec les parties prenantes clés", score: 4, action: 'continue' },
       { text: "Transparence totale : dashboard en libre-service et revues stratégiques régulières", score: 5, action: 'continue' }
     ]
+  },
+
+  // Questions de creusement niveau 2 - GESTION DE LA PERFORMANCE
+  {
+    id: 'performance_measurement_challenges',
+    category: 'Gestion de la Performance',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'performance_main',
+    question: "Quels sont vos principaux défis en matière de mesure de performance ?",
+    options: [
+      { text: "Données achats éparpillées et peu fiables", score: 1, action: 'deep_dive', triggersFollowUp: ['performance_data_quality'] },
+      { text: "Manque de temps pour analyser et reporter", score: 2, action: 'continue' },
+      { text: "KPIs non alignés avec les objectifs business", score: 2, action: 'continue' },
+      { text: "Difficile de mesurer la valeur au-delà des coûts", score: 2, action: 'continue' },
+      { text: "Pas d'outils de reporting adaptés", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'performance_data_quality',
+    category: 'Gestion de la Performance',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 3,
+    parentQuestionId: 'performance_measurement_challenges',
+    question: "Comment cette qualité de données impacte-t-elle votre pilotage ?",
+    options: [
+      { text: "Impossible de prendre des décisions éclairées", score: 1, action: 'continue' },
+      { text: "Temps excessif passé à nettoyer les données", score: 2, action: 'continue' },
+      { text: "Manque de crédibilité des reporting achats", score: 2, action: 'continue' },
+      { text: "Difficultés à identifier les opportunités", score: 2, action: 'continue' },
+      { text: "Pilotage réactif plutôt que proactif", score: 2, action: 'continue' }
+    ]
+  },
+
+  {
+    id: 'performance_stakeholder_engagement',
+    category: 'Gestion de la Performance',
+    priority: 'low',
+    isFollowUp: true,
+    followUpLevel: 2,
+    parentQuestionId: 'performance_reporting',
+    question: "Pourquoi ne communiquez-vous pas davantage sur vos résultats ?",
+    options: [
+      { text: "Résultats achats jugés insuffisants ou décevants", score: 1, action: 'continue' },
+      { text: "Manque de temps pour préparer les communications", score: 2, action: 'continue' },
+      { text: "Stakeholders peu intéressés par les résultats achats", score: 2, action: 'continue' },
+      { text: "Difficultés à valoriser les contributions achats", score: 2, action: 'continue' },
+      { text: "Pas de format de communication adapté", score: 3, action: 'continue' }
+    ]
   }
 ];
 
@@ -969,6 +1593,30 @@ export class OrientationDiagnosticEngine {
     return question;
   }
 
+  // Méthode publique qui retourne la question courante sans exposer les scores
+  getCurrentQuestionForClient(): PublicDiagnosticQuestion | null {
+    const currentQuestion = this.getCurrentQuestion();
+    
+    if (!currentQuestion) {
+      return null;
+    }
+
+    // Convertir vers l'interface publique sans les scores
+    return {
+      id: currentQuestion.id,
+      category: currentQuestion.category,
+      question: currentQuestion.question,
+      options: currentQuestion.options.map(option => ({
+        text: option.text
+        // score délibérément omis
+      })),
+      priority: currentQuestion.priority,
+      isFollowUp: currentQuestion.isFollowUp,
+      parentQuestionId: currentQuestion.parentQuestionId,
+      followUpLevel: currentQuestion.followUpLevel
+    };
+  }
+
   answerQuestion(questionId: string, optionIndex: number): boolean {
     const question = this.questions.find(q => q.id === questionId);
     if (!question || !question.options[optionIndex]) {
@@ -988,23 +1636,47 @@ export class OrientationDiagnosticEngine {
         break;
         
       case 'deep_dive':
-        // Score faible, ajouter question de creusement si disponible
-        const followUpQuestion = orientationQuestions.find(
-          q => q.isFollowUp && q.parentQuestionId === questionId
-        );
-        if (followUpQuestion && !this.answers.has(followUpQuestion.id)) {
-          // Insérer la question de suivi juste après la question actuelle
-          this.questions.splice(this.currentQuestionIndex + 1, 0, followUpQuestion);
-        }
+        // Score faible, ajouter questions de creusement
+        this.addFollowUpQuestions(questionId, selectedOption);
         break;
         
       default:
-        // Continue normalement
+        // Continue normalement, mais vérifier s'il y a des questions déclenchées
+        if (selectedOption.triggersFollowUp) {
+          this.addTriggeredQuestions(selectedOption.triggersFollowUp);
+        }
         break;
     }
 
     this.currentQuestionIndex++;
     return true;
+  }
+
+  private addFollowUpQuestions(questionId: string, selectedOption: DiagnosticOption): void {
+    // Ajouter toutes les questions de suivi niveau 1
+    const followUpQuestions = orientationQuestions.filter(
+      q => q.isFollowUp && q.parentQuestionId === questionId && (!q.followUpLevel || q.followUpLevel === 1)
+    );
+    
+    followUpQuestions.forEach(followUpQuestion => {
+      if (!this.answers.has(followUpQuestion.id)) {
+        this.questions.splice(this.currentQuestionIndex + 1, 0, followUpQuestion);
+      }
+    });
+
+    // Ajouter questions spécifiquement déclenchées
+    if (selectedOption.triggersFollowUp) {
+      this.addTriggeredQuestions(selectedOption.triggersFollowUp);
+    }
+  }
+
+  private addTriggeredQuestions(questionIds: string[]): void {
+    questionIds.forEach(questionId => {
+      const question = orientationQuestions.find(q => q.id === questionId);
+      if (question && !this.answers.has(question.id)) {
+        this.questions.splice(this.currentQuestionIndex + 1, 0, question);
+      }
+    });
   }
 
   isCompleted(): boolean {
@@ -1114,6 +1786,8 @@ export class OrientationDiagnosticEngine {
       overallLevel: this.getMaturityLevel(overallPercentage),
       strengths,
       weaknesses,
+      areasForImprovement: weaknesses, // Alias pour compatibilité
+      actionPlan: [], // Sera rempli par Gemini
       recommendedDiagnostics: this.getRecommendedDiagnostics(categoryScores),
       insights: '', // Sera rempli par Gemini
       recommendations: [], // Sera rempli par Gemini
@@ -1128,18 +1802,8 @@ export class OrientationDiagnosticEngine {
     return 'débutant';
   }
 
-  private getRecommendedDiagnostics(categoryScores: Record<string, any>): Array<{
-    id: string;
-    name: string;
-    priority: 'urgent' | 'important' | 'utile';
-    reason: string;
-  }> {
-    const recommendations: Array<{
-      id: string;
-      name: string;
-      priority: 'urgent' | 'important' | 'utile';
-      reason: string;
-    }> = [];
+  private getRecommendedDiagnostics(categoryScores: Record<string, any>): RecommendedDiagnostic[] {
+    const recommendations: RecommendedDiagnostic[] = [];
     
     // Mapping des catégories vers les diagnostics
     const categoryDiagnosticMapping = {
@@ -1151,32 +1815,32 @@ export class OrientationDiagnosticEngine {
       'Relations avec Partenaires Internes': {
         id: 'stakeholder-management',
         name: 'Diagnostic Gestion des Parties Prenantes',
-        lowScoreReason: 'Vos relations internes doivent être améliorées pour optimiser la collaboration'
+        lowScoreReason: 'Vos relations internes méritent d\'être optimisées pour une meilleure collaboration'
       },
       'Gestion par Catégories': {
         id: 'category-management',
-        name: 'Diagnostic Category Management',
-        lowScoreReason: 'Votre approche catégorielle peut être développée pour maximiser la valeur'
+        name: 'Diagnostic Gestion des Catégories',
+        lowScoreReason: 'Votre approche catégorielle nécessite une structuration plus avancée'
       },
       'Collaboration et Innovation Fournisseurs': {
         id: 'supplier-innovation',
         name: 'Diagnostic Innovation Fournisseurs',
-        lowScoreReason: 'Votre potentiel d\'innovation collaborative avec les fournisseurs est sous-exploité'
+        lowScoreReason: 'Le potentiel d\'innovation de vos fournisseurs peut être mieux exploité'
       },
       'Organisation et Processus': {
-        id: 'maturity-mmcm',
-        name: 'Diagnostic Maturité MMCM',
-        lowScoreReason: 'Vos processus achats ont besoin d\'être formalisés et optimisés'
+        id: 'process-maturity',
+        name: 'Diagnostic Maturité des Processus',
+        lowScoreReason: 'Vos processus achats nécessitent une formalisation et optimisation'
       },
       'Gestion des Contrats': {
         id: 'contract-management',
         name: 'Diagnostic Gestion Contractuelle',
-        lowScoreReason: 'Votre gestion contractuelle nécessite une approche plus structurée'
+        lowScoreReason: 'Votre gestion des contrats peut être significativement améliorée'
       },
       'Sourcing Stratégique': {
         id: 'strategic-sourcing',
         name: 'Diagnostic Sourcing Stratégique',
-        lowScoreReason: 'Vos méthodes de sourcing peuvent être optimisées pour créer plus de valeur'
+        lowScoreReason: 'Vos méthodes de sourcing présentent des opportunités d\'optimisation'
       },
       'Gestion des Risques': {
         id: 'risk-management',
@@ -1191,49 +1855,43 @@ export class OrientationDiagnosticEngine {
       'Achats Responsables': {
         id: 'sustainable-procurement',
         name: 'Diagnostic Achats Responsables',
-        lowScoreReason: 'Votre approche des achats responsables n\'est pas à la hauteur des attentes actuelles en matière de durabilité'
+        lowScoreReason: 'Votre approche RSE et développement durable peut être renforcée'
       },
       'Digitalisation des Achats': {
-        id: 'digital-transformation',
-        name: 'Diagnostic Transformation Digitale des Achats',
-        lowScoreReason: 'Vos outils et processus digitaux sont insuffisamment développés, limitant l\'efficacité de la fonction achats'
+        id: 'digital-procurement',
+        name: 'Diagnostic Maturité Digitale',
+        lowScoreReason: 'Votre transformation digitale achats présente des opportunités d\'amélioration'
       },
       'Gestion de la Performance': {
         id: 'performance-management',
         name: 'Diagnostic Performance Achats',
-        lowScoreReason: 'Le pilotage de la performance de la fonction achats mérite d\'être renforcé avec des indicateurs clairs et un reporting régulier'
+        lowScoreReason: 'Le pilotage de votre performance achats peut être optimisé'
       }
     };
 
-    // Recommander diagnostics selon les faiblesses
-    Object.entries(categoryScores).forEach(([category, data]: [string, any]) => {
+    // Analyser chaque catégorie et recommander des diagnostics si nécessaire
+    Object.entries(categoryScores).forEach(([category, data]) => {
       const mapping = categoryDiagnosticMapping[category as keyof typeof categoryDiagnosticMapping];
-      if (mapping) {
-        if (data.percentage < 40) {
-          recommendations.push({
-            id: mapping.id,
-            name: mapping.name,
-            priority: 'urgent' as const,
-            reason: mapping.lowScoreReason
-          });
-        } else if (data.percentage < 70) {
-          recommendations.push({
-            id: mapping.id,
-            name: mapping.name,
-            priority: 'important' as const,
-            reason: `Votre ${category.toLowerCase()} peut être améliorée pour atteindre l'excellence`
-          });
+      
+      if (mapping && data.percentage < 60) {
+        let priority: 'urgent' | 'important' | 'medium' = 'medium';
+        
+        if (data.percentage < 30) {
+          priority = 'urgent';
+        } else if (data.percentage < 45) {
+          priority = 'important';
         }
+
+        recommendations.push({
+          name: mapping.name,
+          reason: mapping.lowScoreReason,
+          priority,
+          category
+        });
       }
     });
 
-    // Limiter à 3 recommandations max, triées par priorité
-    return recommendations
-      .sort((a, b) => {
-        const priorityOrder = { urgent: 3, important: 2, utile: 1 };
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-      })
-      .slice(0, 3);
+    return recommendations.slice(0, 5); // Limiter à 5 recommandations max
   }
 
   getAnswers(): Map<string, { question: DiagnosticQuestion; option: DiagnosticOption }> {

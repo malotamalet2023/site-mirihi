@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# backup files
+*.bak
+*.old
+*.tmp
+
+# development logs
+docs/CORRECTIONS-*.md
+docs/EVOLUTION-*.md
+docs/GEMINI-*.md
+docs/MISSION-*.md

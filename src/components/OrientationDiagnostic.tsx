@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   OrientationDiagnosticEngine, 
-  DiagnosticQuestion, 
-  DiagnosticResult 
+  DiagnosticQuestion
 } from '@/lib/orientation-diagnostic-engine';
+import { DiagnosticResult } from '@/lib/diagnostic-types';
 import {
   Radar,
   RadarChart,
@@ -27,7 +27,7 @@ interface OrientationDiagnosticProps {
 }
 
 export default function OrientationDiagnostic({ onComplete, autoStart = false }: OrientationDiagnosticProps) {
-  const [engine] = useState(() => new OrientationDiagnosticEngine());
+  const [engine, setEngine] = useState(() => new OrientationDiagnosticEngine());
   const [currentQuestion, setCurrentQuestion] = useState<DiagnosticQuestion | null>(null);
   const [isStarted, setIsStarted] = useState(autoStart);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -47,6 +47,7 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
   }, [isStarted, engine, currentQuestion, updateProgress]);
 
   const startDiagnostic = () => {
+    if (isStarted) return; // Protection contre les clics multiples
     setIsStarted(true);
     setCurrentQuestion(engine.getCurrentQuestion());
     updateProgress();
@@ -81,18 +82,18 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          sessionId: basicResult.sessionId,
-          answers: Array.from(engine.getAnswers().entries()).map(([id, data]) => ({
-            questionId: id,
-            question: data.question.question,
-            category: data.question.category,
-            answer: data.option.text,
-            score: data.option.score
-          })),
-          categoryScores: basicResult.categoryScores,
-          overallScore: basicResult.overallPercentage,
-          strengths: basicResult.strengths,
-          weaknesses: basicResult.weaknesses
+          diagnosticData: {
+            overallScore: basicResult.overallPercentage,
+            categoryScores: basicResult.categoryScores,
+            answers: Array.from(engine.getAnswers().entries()).map(([id, data]) => ({
+              questionId: id,
+              question: data.question.question,
+              category: data.question.category,
+              answer: data.option.text,
+              score: data.option.score
+            })),
+            timestamp: new Date().toISOString()
+          }
         }),
       });
 
@@ -128,8 +129,8 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
     setResult(null);
     setCurrentQuestion(null);
     setProgress({ current: 0, total: 0, percentage: 0 });
-    // Créer un nouveau moteur
-    window.location.reload();
+    // Créer une nouvelle instance du moteur
+    setEngine(new OrientationDiagnosticEngine());
   };
 
   if (isAnalyzing) {
@@ -209,7 +210,8 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
 
               <button
                 onClick={startDiagnostic}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                disabled={isStarted}
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -501,7 +503,7 @@ function OverviewTab({ result, setActiveTab }: {
         </div>
       </div>
 
-      {/* Insights IA */}
+      {/* Insights IA avec Google Search */}
       {result.insights && result.insights.trim() && (
         <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-2xl p-6">
           <div className="flex items-start space-x-4">
@@ -512,29 +514,40 @@ function OverviewTab({ result, setActiveTab }: {
             </div>
             <div className="flex-1">
               <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center">
-                Analyse Experte par Intelligence Artificielle
-                <span className="ml-2 text-sm bg-purple-100 text-purple-700 px-2 py-1 rounded-full">Gemini AI</span>
+                🤖 Analyse IA avec Recherche Google
+                <span className="ml-2 text-sm bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-3 py-1 rounded-full font-semibold">Gemini 2.5 Flash</span>
               </h3>
-              <p className="text-sm text-purple-600 font-medium mb-4">
-                Analyse contextuelle enrichie avec recherche sur les tendances achats actuelles
-              </p>
+              <div className="flex items-center space-x-4 mb-4">
+                <p className="text-sm text-purple-600 font-medium flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Enrichi par Google Search
+                </p>
+                <p className="text-sm text-blue-600 font-medium flex items-center">
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Tendances {new Date().getFullYear()}
+                </p>
+              </div>
               <div className="bg-white rounded-xl p-5 shadow-sm border border-purple-100">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line text-base">
                   {result.insights}
                 </p>
               </div>
-              <div className="mt-3 flex items-center justify-between">
+              <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center space-x-2 text-sm text-purple-600">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Recherche contextuelle avec benchmarks sectoriels</span>
+                  <span>Analyse basée sur les meilleures pratiques actuelles du marché</span>
                 </div>
                 <button 
                   onClick={() => setActiveTab('recommendations')}
-                  className="text-sm bg-purple-600 text-white px-3 py-1.5 rounded-lg hover:bg-purple-700 transition-colors"
+                  className="text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors font-medium"
                 >
-                  Voir l'analyse complète →
+                  Voir recommandations détaillées →
                 </button>
               </div>
             </div>
@@ -696,16 +709,34 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-sm border border-purple-100">
-            <p className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
-              {result.insights}
-            </p>
+            <div className="prose prose-gray max-w-none">
+              <div className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
+                {result.insights}
+              </div>
+            </div>
           </div>
           
-          <div className="mt-4 flex items-center space-x-2 text-sm text-purple-600">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span>Analyse générée par Gemini AI avec contexte sectoriel et tendances 2025</span>
+          <div className="mt-4 flex flex-wrap items-center gap-4">
+            <div className="flex items-center space-x-2 text-sm text-purple-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span className="font-medium">Gemini 2.5 Flash</span>
+            </div>
+            
+            <div className="flex items-center space-x-2 text-sm text-blue-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span className="font-medium">Google Search intégré</span>
+            </div>
+            
+            <div className="flex items-center space-x-2 text-sm text-green-600">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-medium">Tendances 2025</span>
+            </div>
           </div>
         </div>
       )}

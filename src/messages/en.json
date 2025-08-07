@@ -1,0 +1,138 @@
+{
+  "nav": {
+    "home": "Home",
+    "resources": "Resources",
+    "myAccount": "My Account"
+  },
+  "home": {
+    "title": "Welcome to Mirihi",
+    "titleBrand": "Mirihi",
+    "subtitle": "Your partner in procurement process diagnosis and improvement",
+    "description": "Discover your specific needs with our intelligent orientation diagnostic that evaluates 12 key areas of modern procurement: strategy, digitalization, responsible purchasing and more.",
+    "orientationDiagnostic": "Orientation Diagnostic",
+    "startDiagnostic": "Start orientation diagnostic"
+  },
+  "modules": {
+    "title": "Our Diagnostic Modules",
+    "subtitle": "Specialized diagnostics based on reference Excel models for precise analysis of your procurement processes",
+    "strategicOrientation": {
+      "title": "Strategic Orientation",
+      "description": "8-10 min • Vision and alignment"
+    },
+    "kraljic": {
+      "title": "Kraljic Segmentation",
+      "description": "12-15 min • Category matrix"
+    },
+    "supplierManagement": {
+      "title": "Supplier Management",
+      "description": "10-12 min • SRM & clustering"
+    },
+    "mmcm": {
+      "title": "MMCM Maturity",
+      "description": "15-18 min • Complete model"
+    },
+    "geminiAnalysis": "Gemini AI analysis with scores and radar charts",
+    "intelligentDiagnostic": {
+      "title": "Intelligent Orientation Diagnostic",
+      "step1": "5-minute adaptive diagnostic with dynamic questions",
+      "step2": "Gemini AI analysis with scores and radar charts",
+      "step3": "Personalized recommendations and action plan"
+    },
+    "seeAllDiagnostics": "See all diagnostics"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Complete solutions to transform your procurement function",
+    "resources": {
+      "title": "Our Resources",
+      "description": "Explore our specialized diagnostic tools and training modules to develop your procurement expertise.",
+      "cta": "Discover our resources"
+    },
+    "account": {
+      "title": "My Account",
+      "description": "Access your personalized diagnostics, track your progress and consult your recommendations.",
+      "cta": "Access my account"
+    }
+  },
+  "diagnostic": {
+    "title": "Intelligent Orientation Diagnostic",
+    "subtitle": "A personalized diagnostic that adapts to your answers to precisely identify your needs",
+    "features": {
+      "fast": {
+        "title": "Fast",
+        "description": "Less than 5 minutes for a complete diagnostic"
+      },
+      "intelligent": {
+        "title": "Intelligent",
+        "description": "Questions adapted according to your previous answers"
+      },
+      "personalized": {
+        "title": "Personalized",
+        "description": "Tailored recommendations for your situation"
+      }
+    },
+    "start": "Start diagnostic",
+    "back": "Back to home",
+    "question": "Question",
+    "analyzing": "Analyzing your answer...",
+    "previousResponses": "Your previous answers",
+    "completed": "Diagnostic Completed",
+    "duration": "Duration",
+    "questions": "questions",
+    "analysis": "Analysis of your situation",
+    "strengths": "Your strengths",
+    "improvements": "Areas for improvement identified",
+    "recommendations": "Recommended modules for you",
+    "learnMore": "Learn more",
+    "restart": "Restart diagnostic",
+    "loading": "Loading..."
+  },
+  "resources": {
+    "title": "Our Resources",
+    "subtitle": "Explore our diagnostic tools",
+    "headerDescription": "Discover our collection of specialized diagnostics to optimize your procurement function",
+    "headerSubtitle": "Each diagnostic is based on best practices and adapted to your maturity level",
+    "comingSoon": "Coming Soon",
+    "available": "Available",
+    "allLevels": "All levels",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "expert": "Expert",
+    "startDiagnostic": "Start",
+    "diagnostics": {
+      "orientation": {
+        "title": "Orientation Diagnostic",
+        "description": "Identify your specific needs with our intelligent adaptive diagnostic in 5 minutes."
+      },
+      "strategicOrientation": {
+        "title": "Strategic Orientation",
+        "description": "Evaluate the alignment of your procurement strategy with business objectives."
+      },
+      "supplierManagement": {
+        "title": "Supplier Management",
+        "description": "Analyze your approach to supplier relationship management and SRM."
+      },
+      "categorySegmentation": {
+        "title": "Kraljic Segmentation",
+        "description": "Optimize your procurement category segmentation matrix."
+      },
+      "maturityMmcm": {
+        "title": "MMCM Maturity",
+        "description": "Complete assessment of your procurement function maturity according to the MMCM model."
+      }
+    }
+  },
+  "account": {
+    "title": "My Account",
+    "accessCode": "Access Code",
+    "login": "Login",
+    "enterCode": "Enter your access code",
+    "invalidCode": "Invalid access code"
+  },
+  "common": {
+    "language": "Language",
+    "close": "Close",
+    "discover": "Discover",
+    "connect": "Connect"
+  }
+}

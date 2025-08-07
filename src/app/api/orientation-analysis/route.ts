@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 
 // Configuration API avec support de multiples variables d'environnement
 const API_KEY = process.env.GOOGLE_GENERATIVE_AI_API_KEY || 
@@ -10,12 +10,12 @@ if (!API_KEY) {
   console.warn('⚠️ Clé API Gemini non configurée. L\'analyse IA utilisera le fallback.');
 }
 
-// Initialisation Gemini avec gestion d'erreur
-let genAI: GoogleGenerativeAI | null = null;
+// Initialisation du client Google GenAI pour Gemini 2.5 Flash avec Google Search
+let genAI: GoogleGenAI | null = null;
 try {
-  genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+  genAI = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 } catch (error) {
-  console.error('❌ Erreur d\'initialisation Gemini:', error);
+  console.error('❌ Erreur d\'initialisation Google GenAI:', error);
 }
 
 // Types et interfaces
@@ -113,31 +113,28 @@ ${goodDomains.map(d => `• ${d.name}: ${d.percentage}% (${d.level})`).join('\n'
 Domaines à améliorer (<50%):
 ${criticalDomains.map(d => `• ${d.name}: ${d.percentage}% (${d.level})`).join('\n') || 'Aucun domaine critique'}
 
-CONTEXTE SECTORIEL:
-Recherche et intègre les tendances actuelles du procurement et des meilleures pratiques en ${new Date().getFullYear()} pour enrichir ton analyse. 
-Inclus des benchmarks de performance sectoriels, des technologies émergentes (IA, blockchain, automation), 
-des enjeux de durabilité/ESG qui impactent les fonctions achats modernes, et les dernières innovations en digitalisation des achats.
+MISSION AVEC RECHERCHE CONTEXTUALISÉE:
+Utilise Google Search pour rechercher les dernières tendances en procurement et achats ${new Date().getFullYear()}, 
+les meilleures pratiques actuelles, les benchmarks de performance, et les innovations technologiques en cours.
 
-Focus particulier sur :
-- Les pratiques d'achats responsables et ESG (Scopes 1,2,3, taxonomie européenne)
-- La transformation digitale des achats (RPA, IA prédictive, analytics avancés)
-- Les KPIs et méthodes de pilotage de la performance achats modernes
-- Les nouvelles réglementations (Due Diligence, CSRD, taxonomie verte)
-- Les technologies disruptives (blockchain supply chain, IoT, jumeaux numériques)
+Recherche spécifiquement :
+- "meilleures pratiques achats ${new Date().getFullYear()}" 
+- "transformation digitale procurement tendances"
+- "ESG achats responsables nouvelles réglementations"
+- "KPIs performance achats modernes"
+- "technologies émergentes supply chain"
 
-INSTRUCTIONS SPÉCIALES:
-- Utilise tes connaissances des dernières évolutions du secteur pour contextualiser l'analyse
-- Référence les standards et certifications actuels (CIPS, ISM, CDAF)
-- Intègre les impacts post-COVID sur les supply chains
-- Mentionne les outils technologiques leaders du marché
+Intègre ces informations actualisées dans ton analyse pour fournir des recommandations ultra-pertinentes.
 
 Génère une analyse JSON structurée avec:
 {
-  "insights": "Analyse qualitative personnalisée de 200-300 mots sur le profil et les implications stratégiques, enrichie par les tendances sectorielles actuelles",
-  "recommendations": ["3-4 recommandations concrètes et actionnables, alignées sur les meilleures pratiques 2025"],
-  "priorityActions": ["3 actions prioritaires pour les 30-90 prochains jours, incluant des outils/méthodes modernes"],
-  "industryBenchmark": "Positionnement par rapport aux standards sectoriels actuels avec références précises aux leaders du marché",
-  "resourceSuggestions": ["3-4 ressources spécifiques ultra-récentes (formations, outils, méthodologies, certifications)"],
+  "insights": "Analyse qualitative personnalisée de 250-350 mots intégrant les dernières tendances trouvées via recherche Google",
+  "recommendations": ["3-4 recommandations basées sur les meilleures pratiques actuelles trouvées en ligne"],
+  "priorityActions": ["3 actions prioritaires 30-90 jours utilisant les outils/méthodologies les plus récents"],
+  "industryBenchmark": "Positionnement vs standards actuels avec références aux leaders du marché trouvés en ligne",
+  "resourceSuggestions": ["3-4 ressources/outils/formations les plus récents et pertinents trouvés via recherche"],
+  "roadmapSuggestions": ["3-4 étapes évolution 6-12 mois alignées sur les tendances sectorielles actuelles"]
+}
   "roadmapSuggestions": ["3-4 étapes d'évolution sur 6-12 mois intégrant les technologies et pratiques émergentes"]
 }
 
@@ -158,24 +155,32 @@ async function performGeminiAnalysis(data: DiagnosticData): Promise<AIAnalysisRe
   }
 
   try {
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
-      generationConfig: {
-        temperature: 0.7,
-        topP: 0.8,
-        topK: 40,
-        maxOutputTokens: 2048,
-      }
-    });
+    // Configuration du grounding tool pour Google Search
+    const groundingTool = {
+      googleSearch: {},
+    };
+
+    // Configuration de génération avec Google Search
+    const config = {
+      tools: [groundingTool],
+      temperature: 0.7,
+      topP: 0.8,
+      topK: 40,
+      maxOutputTokens: 2048,
+    };
 
     const prompt = generateContextualPrompt(data);
-    console.log('🚀 Envoi de la requête à Gemini...');
+    console.log('🚀 Envoi de la requête à Gemini 2.5 Flash avec Google Search...');
     
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    // Utilisation de la nouvelle API avec Google Search intégré
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.0-flash-exp",
+      contents: prompt,
+      config,
+    });
 
-    console.log('📄 Réponse Gemini reçue:', text.substring(0, 200) + '...');
+    const text = response.text || '';
+    console.log('📄 Réponse Gemini avec recherche Google reçue:', text.substring(0, 200) + '...');
 
     // Extraction et validation du JSON
     let analysisResult: AIAnalysisResult;
@@ -308,9 +313,15 @@ export async function POST(request: NextRequest) {
       analysisResult = generateFallbackAnalysis(diagnosticData);
     }
 
-    // Enrichissement avec des métadonnées
-    const enrichedResult = {
-      ...analysisResult,
+    // Transformation pour compatibilité avec le format attendu par le frontend
+    const responseData = {
+      success: true,
+      insights: analysisResult.insights,
+      recommendations: analysisResult.recommendations,
+      nextSteps: analysisResult.priorityActions,
+      industryBenchmark: analysisResult.industryBenchmark,
+      resourceSuggestions: analysisResult.resourceSuggestions,
+      roadmapSuggestions: analysisResult.roadmapSuggestions,
       metadata: {
         analysisTimestamp: new Date().toISOString(),
         scoreGlobal: diagnosticData.overallScore,
@@ -323,10 +334,7 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ Analyse complétée avec succès');
 
-    return NextResponse.json({
-      success: true,
-      analysis: enrichedResult
-    });
+    return NextResponse.json(responseData);
 
   } catch (error) {
     console.error('❌ Erreur lors de l\'analyse:', error);
@@ -342,7 +350,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     service: 'Orientation Analysis API',
-    version: '2.0',
+    version: '2.5',
     status: 'active',
     geminiAvailable: !!genAI,
     timestamp: new Date().toISOString()

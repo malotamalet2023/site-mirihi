@@ -1,0 +1,138 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "resources": "Recursos",
+    "myAccount": "Mi Cuenta"
+  },
+  "home": {
+    "title": "Bienvenido a Mirihi",
+    "titleBrand": "Mirihi",
+    "subtitle": "Tu socio en diagnóstico y mejora de procesos de compras",
+    "description": "Descubre tus necesidades específicas con nuestro diagnóstico de orientación inteligente que evalúa 12 áreas clave de las compras modernas: estrategia, digitalización, compras responsables y más.",
+    "orientationDiagnostic": "Diagnóstico de Orientación",
+    "startDiagnostic": "Iniciar diagnóstico de orientación"
+  },
+  "modules": {
+    "title": "Nuestros Módulos de Diagnóstico",
+    "subtitle": "Diagnósticos especializados basados en modelos Excel de referencia para un análisis preciso de tus procesos de compras",
+    "strategicOrientation": {
+      "title": "Orientación Estratégica",
+      "description": "8-10 min • Visión y alineación"
+    },
+    "kraljic": {
+      "title": "Segmentación Kraljic",
+      "description": "12-15 min • Matriz de categorías"
+    },
+    "supplierManagement": {
+      "title": "Gestión de Proveedores",
+      "description": "10-12 min • SRM y clustering"
+    },
+    "mmcm": {
+      "title": "Madurez MMCM",
+      "description": "15-18 min • Modelo completo"
+    },
+    "geminiAnalysis": "Análisis IA Gemini con puntajes y gráficos radar",
+    "intelligentDiagnostic": {
+      "title": "Diagnóstico de Orientación Inteligente",
+      "step1": "Diagnóstico adaptativo de 5 minutos con preguntas dinámicas",
+      "step2": "Análisis IA Gemini con puntajes y gráficos radar",
+      "step3": "Recomendaciones personalizadas y plan de acción"
+    },
+    "seeAllDiagnostics": "Ver todos los diagnósticos"
+  },
+  "services": {
+    "title": "Nuestros Servicios",
+    "subtitle": "Soluciones completas para transformar su función de compras",
+    "resources": {
+      "title": "Nuestros Recursos",
+      "description": "Explore nuestras herramientas de diagnóstico especializadas y módulos de formación para desarrollar su experiencia en compras.",
+      "cta": "Descubrir nuestros recursos"
+    },
+    "account": {
+      "title": "Mi Cuenta",
+      "description": "Acceda a sus diagnósticos personalizados, siga su progreso y consulte sus recomendaciones.",
+      "cta": "Acceder a mi cuenta"
+    }
+  },
+  "diagnostic": {
+    "title": "Diagnóstico de Orientación Inteligente",
+    "subtitle": "Un diagnóstico personalizado que se adapta a tus respuestas para identificar precisamente tus necesidades",
+    "features": {
+      "fast": {
+        "title": "Rápido",
+        "description": "Menos de 5 minutos para un diagnóstico completo"
+      },
+      "intelligent": {
+        "title": "Inteligente",
+        "description": "Preguntas adaptadas según tus respuestas anteriores"
+      },
+      "personalized": {
+        "title": "Personalizado",
+        "description": "Recomendaciones a medida para tu situación"
+      }
+    },
+    "start": "Iniciar diagnóstico",
+    "back": "Volver al inicio",
+    "question": "Pregunta",
+    "analyzing": "Analizando tu respuesta...",
+    "previousResponses": "Tus respuestas anteriores",
+    "completed": "Diagnóstico Completado",
+    "duration": "Duración",
+    "questions": "preguntas",
+    "analysis": "Análisis de tu situación",
+    "strengths": "Tus fortalezas",
+    "improvements": "Áreas de mejora identificadas",
+    "recommendations": "Módulos recomendados para ti",
+    "learnMore": "Saber más",
+    "restart": "Reiniciar diagnóstico",
+    "loading": "Cargando..."
+  },
+  "resources": {
+    "title": "Nuestros Recursos",
+    "subtitle": "Explora nuestras herramientas de diagnóstico",
+    "headerDescription": "Descubre nuestra colección de diagnósticos especializados para optimizar tu función de compras",
+    "headerSubtitle": "Cada diagnóstico está basado en las mejores prácticas y adaptado a tu nivel de madurez",
+    "comingSoon": "Próximamente",
+    "available": "Disponible",
+    "allLevels": "Todos los niveles",
+    "intermediate": "Intermedio",
+    "advanced": "Avanzado",
+    "expert": "Experto",
+    "startDiagnostic": "Comenzar",
+    "diagnostics": {
+      "orientation": {
+        "title": "Diagnóstico de Orientación",
+        "description": "Identifica tus necesidades específicas con nuestro diagnóstico adaptativo inteligente en 5 minutos."
+      },
+      "strategicOrientation": {
+        "title": "Orientación Estratégica",
+        "description": "Evalúa la alineación de tu estrategia de compras con los objetivos empresariales."
+      },
+      "supplierManagement": {
+        "title": "Gestión de Proveedores",
+        "description": "Analiza tu enfoque de gestión de relaciones con proveedores y SRM."
+      },
+      "categorySegmentation": {
+        "title": "Segmentación Kraljic",
+        "description": "Optimiza tu matriz de segmentación de categorías de compras."
+      },
+      "maturityMmcm": {
+        "title": "Madurez MMCM",
+        "description": "Evaluación completa de la madurez de tu función de compras según el modelo MMCM."
+      }
+    }
+  },
+  "account": {
+    "title": "Mi Cuenta",
+    "accessCode": "Código de Acceso",
+    "login": "Iniciar Sesión",
+    "enterCode": "Ingresa tu código de acceso",
+    "invalidCode": "Código de acceso inválido"
+  },
+  "common": {
+    "language": "Idioma",
+    "close": "Cerrar",
+    "discover": "Descubrir",
+    "connect": "Conectar"
+  }
+}

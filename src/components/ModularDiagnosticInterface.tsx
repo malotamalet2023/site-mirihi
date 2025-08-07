@@ -34,7 +34,7 @@ export default function ModularDiagnosticInterface() {
 
           <div className="space-y-4">
             <Link
-              href="/fr/orientation-diagnostic"
+              href="/fr"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

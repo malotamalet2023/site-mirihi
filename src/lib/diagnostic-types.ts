@@ -135,19 +135,23 @@ export enum VisualizationType {
 }
 
 export interface DiagnosticResult {
-  diagnosticId: string;
+  diagnosticId?: string;
   sessionId: string;
   timestamp: Date;
   overallScore: number;
+  overallPercentage: number;
   overallLevel: string;
-  categories: Record<string, CategoryResult>;
+  categoryScores: Record<string, CategoryResult>;
   segmentationResults?: SegmentationResult;
   clusteringResults?: ClusteringResult;
-  recommendations: Recommendation[];
+  recommendations: string[]; // Simplified for compatibility
   actionPlan: ActionItem[];
   nextSteps: string[];
   strengths: string[];
+  weaknesses: string[];
   areasForImprovement: string[];
+  insights?: string; // Analyse approfondie par Gemini avec Google Search
+  recommendedDiagnostics: RecommendedDiagnostic[];
 }
 
 export interface CategoryResult {
@@ -199,6 +203,13 @@ export interface ClusterItem {
   cluster: string;
   features: number[];
   distance: number;
+}
+
+export interface RecommendedDiagnostic {
+  name: string;
+  reason: string;
+  priority: 'urgent' | 'important' | 'medium';
+  category?: string;
 }
 
 export interface Recommendation {

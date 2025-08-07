@@ -125,7 +125,7 @@ export default function DiagnosticsPage() {
               </div>
               <div className="ml-8">
                 <Link
-                  href="/fr/orientation-diagnostic"
+                  href="/fr"
                   className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-mirihi-blue-1 to-mirihi-teal text-white font-semibold rounded-xl hover:shadow-lg transition-all"
                 >
                   Commencer l&apos;orientation
