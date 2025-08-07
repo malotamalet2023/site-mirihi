@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 Mirihi - Diagnostic Adaptatif Achats
 
-## Getting Started
+Site web moderne pour le diagnostic et l'amélioration des processus d'achat avec intelligence adaptative.
 
-First, run the development server:
+## ✨ Fonctionnalités
 
+- **Diagnostic Adaptatif** : Questions intelligentes qui s'adaptent aux réponses
+- **Rapports Professionnels** : Graphiques radar et visualisations avancées
+- **Optimisation UX** : Diagnostic en moins de 5 minutes
+- **Responsive Design** : Interface moderne et accessible
+
+## 🚀 Démarrage Rapide
+
+### Prérequis
+- Node.js 18+ 
+- npm ou yarn
+
+### Installation
 ```bash
+# Cloner le projet
+git clone [repo-url]
+cd site-mirihi
+
+# Installer les dépendances
+npm install
+
+# Lancer en développement
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Le site sera accessible sur http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Structure du Projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── src/
+│   ├── app/                    # Pages Next.js
+│   │   ├── [locale]/          # Pages localisées
+│   │   └── api/               # API Routes
+│   ├── components/            # Composants React
+│   ├── lib/                   # Logique métier
+│   └── i18n/                  # Internationalisation
+├── messages/                  # Traductions
+├── docs/                      # Documentation
+└── public/                    # Fichiers statiques
+```
 
-## Learn More
+## 🎯 Diagnostic Adaptatif
 
-To learn more about Next.js, take a look at the following resources:
+Le système de diagnostic utilise un moteur intelligent qui :
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Analyse les réponses** en temps réel
+2. **Adapte les questions** selon le niveau de maturité
+3. **Optimise la durée** (5-8 questions vs 13+ classique)
+4. **Génère des rapports** avec graphiques radar professionnels
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Composants Principaux
 
-## Deploy on Vercel
+- `AdaptiveIntelligentDiagnostic.tsx` - Interface utilisateur adaptative
+- `ProfessionalDiagnosticReport.tsx` - Rapports avec graphiques
+- `adaptive-diagnostic.ts` - Moteur d'intelligence adaptatif
+- `/api/adaptive-diagnostic/` - API backend intelligent
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Technologies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend** : Next.js 15, React 18, TypeScript
+- **Styling** : Tailwind CSS
+- **Charts** : Recharts
+- **Icons** : Heroicons
+- **Internationalisation** : next-intl
+
+## 📊 Performance
+
+- **Temps de diagnostic** : 5 minutes max (vs 15+ avant)
+- **Questions adaptatives** : 5-8 questions intelligentes
+- **Taux de completion** : Optimisé par l'UX fluide
+- **Rapports** : Génération instantanée avec graphiques
+
+## 🔧 Scripts Disponibles
+
+```bash
+npm run dev          # Développement
+npm run build        # Build production
+npm run start        # Serveur production
+npm run lint         # Linting
+```
+
+## 📚 Documentation
+
+- [Succès Diagnostic Adaptatif](./docs/ADAPTIVE_DIAGNOSTIC_SUCCESS.md)
+- [Rapports Professionnels](./docs/PROFESSIONAL_REPORT_SUCCESS.md)
+- [Archives](./docs/archives/) - Historique du développement
+
+## 🌍 Langues Supportées
+
+- Français (fr)
+- Anglais (en) 
+- Espagnol (es)
+
+## 📞 Support
+
+Pour toute question ou support, consultez la documentation dans le dossier `docs/`.
+
+---
+
+**Mirihi** - Optimisez vos processus d'achat avec intelligence 🚀

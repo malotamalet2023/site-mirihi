@@ -1,26 +1,163 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Mirihi Palette - CSS Variables for backup */
+  --mirihi-blue-1: #2099D8;
+  --mirihi-blue-2: #239CCE;
+  --mirihi-blue-3: #27A6C2;
+  --mirihi-teal: #25B7AB;
+  --mirihi-green-1: #5BBE77;
+  --mirihi-green-2: #7EC44E;
+  --mirihi-lime-1: #8DD228;
+  --mirihi-lime-2: #ABD22A;
+  --mirihi-text-black: #000000;
+  --mirihi-text-grey: #57565A;
+  --mirihi-text-dark-blue: #104D6C;
+  --mirihi-text-light-blue: #1873A2;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2099D8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #239CCE;
+}
+
+/* Additional utilities for smooth animations */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Mirihi Color Utilities */
+  .text-mirihi-blue-1 { color: var(--mirihi-blue-1); }
+  .text-mirihi-blue-2 { color: var(--mirihi-blue-2); }
+  .text-mirihi-blue-3 { color: var(--mirihi-blue-3); }
+  .text-mirihi-teal { color: var(--mirihi-teal); }
+  .text-mirihi-green-1 { color: var(--mirihi-green-1); }
+  .text-mirihi-green-2 { color: var(--mirihi-green-2); }
+  .text-mirihi-lime-1 { color: var(--mirihi-lime-1); }
+  .text-mirihi-lime-2 { color: var(--mirihi-lime-2); }
+  .text-mirihi-text-black { color: var(--mirihi-text-black); }
+  .text-mirihi-text-grey { color: var(--mirihi-text-grey); }
+  .text-mirihi-text-dark-blue { color: var(--mirihi-text-dark-blue); }
+  .text-mirihi-text-light-blue { color: var(--mirihi-text-light-blue); }
+
+  .bg-mirihi-blue-1 { background-color: var(--mirihi-blue-1); }
+  .bg-mirihi-blue-2 { background-color: var(--mirihi-blue-2); }
+  .bg-mirihi-blue-3 { background-color: var(--mirihi-blue-3); }
+  .bg-mirihi-teal { background-color: var(--mirihi-teal); }
+  .bg-mirihi-green-1 { background-color: var(--mirihi-green-1); }
+  .bg-mirihi-green-2 { background-color: var(--mirihi-green-2); }
+  .bg-mirihi-lime-1 { background-color: var(--mirihi-lime-1); }
+  .bg-mirihi-lime-2 { background-color: var(--mirihi-lime-2); }
+
+  .border-mirihi-blue-1 { border-color: var(--mirihi-blue-1); }
+  .border-mirihi-blue-2 { border-color: var(--mirihi-blue-2); }
+  .border-mirihi-blue-3 { border-color: var(--mirihi-blue-3); }
+  .border-mirihi-teal { border-color: var(--mirihi-teal); }
+  .border-mirihi-green-1 { border-color: var(--mirihi-green-1); }
+  .border-mirihi-green-2 { border-color: var(--mirihi-green-2); }
+  .border-mirihi-lime-1 { border-color: var(--mirihi-lime-1); }
+  .border-mirihi-lime-2 { border-color: var(--mirihi-lime-2); }
+
+  /* Gradient backgrounds */
+  .bg-gradient-mirihi-blue {
+    background: linear-gradient(135deg, var(--mirihi-blue-1), var(--mirihi-blue-3));
+  }
+  
+  .bg-gradient-mirihi-teal {
+    background: linear-gradient(135deg, var(--mirihi-teal), var(--mirihi-blue-3));
+  }
+  
+  .bg-gradient-mirihi-green {
+    background: linear-gradient(135deg, var(--mirihi-green-1), var(--mirihi-green-2));
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mirihi-blue-2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mirihi-blue-1);
 }
