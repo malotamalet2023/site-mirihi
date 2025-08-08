@@ -1,4 +1,8 @@
 {
+  "brand": {
+    "name": "Mirihi",
+    "tagline": "Diagnostic Achats"
+  },
   "nav": {
     "home": "Accueil",
     "resources": "Ressources",
@@ -15,22 +19,10 @@
   "modules": {
     "title": "Nos Modules de Diagnostic",
     "subtitle": "Diagnostics spécialisés basés sur les modèles Excel de référence pour une analyse précise de vos processus d'achat",
-    "strategicOrientation": {
-      "title": "Orientation Stratégique",
-      "description": "8-10 min • Vision et alignement"
-    },
-    "kraljic": {
-      "title": "Segmentation Kraljic",
-      "description": "12-15 min • Matrice catégories"
-    },
-    "supplierManagement": {
-      "title": "Gestion Fournisseurs",
-      "description": "10-12 min • SRM & clustering"
-    },
-    "mmcm": {
-      "title": "Maturité MMCM",
-      "description": "15-18 min • Modèle complet"
-    },
+    "strategicOrientation": {"title": "Orientation Stratégique", "description": "8-10 min • Vision et alignement"},
+    "kraljic": {"title": "Segmentation Kraljic", "description": "12-15 min • Matrice catégories"},
+    "supplierManagement": {"title": "Gestion Fournisseurs", "description": "10-12 min • SRM & clustering"},
+    "mmcm": {"title": "Maturité MMCM", "description": "15-18 min • Modèle complet"},
     "geminiAnalysis": "Analyse IA Gemini avec scores et graphiques radar",
     "intelligentDiagnostic": {
       "title": "Diagnostic d'Orientation Intelligent",
@@ -43,33 +35,16 @@
   "services": {
     "title": "Nos Services",
     "subtitle": "Des solutions complètes pour transformer votre fonction achats",
-    "resources": {
-      "title": "Nos Ressources",
-      "description": "Explorez nos outils de diagnostic spécialisés et nos modules de formation pour développer votre expertise achats.",
-      "cta": "Découvrir nos ressources"
-    },
-    "account": {
-      "title": "Mon Compte",
-      "description": "Accédez à vos diagnostics personnalisés, suivez votre progression et consultez vos recommandations.",
-      "cta": "Accéder à mon compte"
-    }
+    "resources": {"title": "Nos Ressources", "description": "Explorez nos outils de diagnostic spécialisés et nos modules de formation pour développer votre expertise achats.", "cta": "Découvrir nos ressources"},
+    "account": {"title": "Mon Compte", "description": "Accédez à vos diagnostics personnalisés, suivez votre progression et consultez vos recommandations.", "cta": "Accéder à mon compte"}
   },
   "diagnostic": {
     "title": "Diagnostic d'Orientation Intelligent",
     "subtitle": "Un diagnostic personnalisé qui s'adapte à vos réponses pour identifier précisément vos besoins",
     "features": {
-      "fast": {
-        "title": "Rapide",
-        "description": "Moins de 5 minutes pour un diagnostic complet"
-      },
-      "intelligent": {
-        "title": "Intelligent",
-        "description": "Questions adaptées selon vos réponses précédentes"
-      },
-      "personalized": {
-        "title": "Personnalisé",
-        "description": "Recommandations sur mesure pour votre situation"
-      }
+      "fast": {"title": "Rapide", "description": "Moins de 5 minutes pour un diagnostic complet"},
+      "intelligent": {"title": "Intelligent", "description": "Questions adaptées selon vos réponses précédentes"},
+      "personalized": {"title": "Personnalisé", "description": "Recommandations sur mesure pour votre situation"}
     },
     "start": "Commencer le diagnostic",
     "back": "Retour à l'accueil",
@@ -85,7 +60,55 @@
     "recommendations": "Modules recommandés pour vous",
     "learnMore": "En savoir plus",
     "restart": "Refaire le diagnostic",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "adaptiveTitle": "Diagnostic d'Orientation Adaptatif",
+    "intelligentBadge": "Diagnostic Intelligent & Adaptatif",
+    "stepQuestions": "Questions adaptées",
+    "stepAI": "Analyse IA",
+    "stepRecommendations": "Recommandations",
+    "adaptiveInfo": "Diagnostic adaptatif : les questions s'ajustent selon vos réponses.",
+    "progressQuestion": "Question",
+    "progressEstimated": "Temps estimé restant",
+    "scoreGlobal": "Score Global",
+    "maturityLevel": "Niveau de Maturité",
+    "strengthsLabel": "Points Forts",
+    "weaknessesLabel": "Axes d'Amélioration",
+    "tabOverview": "Vue d'ensemble",
+    "tabRadar": "Graphiques",
+    "tabRecommendations": "Recommandations",
+    "yourStrengths": "Vos Points Forts",
+    "yourWeaknesses": "Axes d'Amélioration",
+    "seeDetailedRecommendations": "Voir recommandations détaillées →",
+    "aiPersonalizedRecommendations": "Recommandations Personnalisées",
+    "restartShort": "Recommencer",
+    "introTagline": "Évaluez 12 domaines clés d'excellence achats en 5 minutes avec notre IA",
+    "stepQuestionsInfo": "Le diagnostic s'adapte à vos réponses",
+    "stepAIInfo": "Gemini AI analyse vos réponses",
+    "stepRecommendationsInfo": "Diagnostics personnalisés suggérés",
+    "loadingNextQuestion": "Chargement de la question suivante...",
+    "adaptiveLong": "Diagnostic adaptatif : Les questions suivantes s'adapteront selon vos réponses. Si vous montrez des forces, nous approfondirons moins. Si nous détectons des faiblesses, nous creuserons davantage.",
+    "intelligentInfo": "Diagnostic intelligent : Ce diagnostic s'adapte en temps réel à vos réponses pour optimiser votre temps et identifier précisément vos besoins.",
+    "progressQuestionFull": "Question {current} sur {total}",
+    "progressEstimatedTime": "Temps estimé restant",
+    "resultsTitle": "Résultats de votre Diagnostic d'Orientation",
+    "recommendedDiagnosticsLabel": "Diagnostics Recommandés",
+    "newDiagnostic": "Nouveau Diagnostic",
+    "printResults": "Imprimer les Résultats",
+    "fallbackStrengthsNone": "Aucun point fort significatif identifié. Opportunité d'amélioration globale.",
+    "fallbackWeaknessesExcellent": "Excellente performance globale ! Continuez sur cette lancée.",
+    "aiAnalysisTitle": "Analyse IA avec Recherche Google",
+    "aiAnalysisEnriched": "Enrichi par Google Search",
+    "aiAnalysisTrends": "Tendances {year}",
+    "bestPracticesNote": "Analyse basée sur les meilleures pratiques actuelles du marché",
+    "categoryDetailTitle": "Détail par Catégorie",
+    "radarChartTitle": "Graphique Radar - Vue d'ensemble",
+    "barChartTitle": "Graphique en Barres - Détail des scores",
+    "deepAIAnalysisTitle": "Analyse Approfondie par Intelligence Artificielle",
+    "deepAIAnalysisSubtitle": "Analyse contextuelle enrichie avec recherche sur les tendances actuelles",
+    "recommendedDiagnosticsForYou": "Diagnostics Recommandés pour Vous",
+    "startThisDiagnostic": "Commencer ce diagnostic",
+    "noSpecificDiagnostics": "Aucun diagnostic spécifique requis. Votre niveau est satisfaisant dans tous les domaines.",
+    "nextStepsSuggested": "Prochaines Étapes Suggérées"
   },
   "resources": {
     "title": "Nos ressources",
@@ -100,26 +123,11 @@
     "expert": "Expert",
     "startDiagnostic": "Commencer",
     "diagnostics": {
-      "orientation": {
-        "title": "Diagnostic d'Orientation",
-        "description": "Identifiez vos besoins spécifiques avec notre diagnostic adaptatif intelligent en 5 minutes."
-      },
-      "strategicOrientation": {
-        "title": "Orientation Stratégique",
-        "description": "Évaluez l'alignement de votre stratégie achats avec les objectifs d'entreprise."
-      },
-      "supplierManagement": {
-        "title": "Gestion Fournisseurs",
-        "description": "Analysez votre approche de la gestion des relations fournisseurs et du SRM."
-      },
-      "categorySegmentation": {
-        "title": "Segmentation Kraljic",
-        "description": "Optimisez votre matrice de segmentation des catégories d'achats."
-      },
-      "maturityMmcm": {
-        "title": "Maturité MMCM",
-        "description": "Évaluation complète de la maturité de votre fonction achats selon le modèle MMCM."
-      }
+      "orientation": {"title": "Diagnostic d'Orientation", "description": "Identifiez vos besoins spécifiques avec notre diagnostic adaptatif intelligent en 5 minutes."},
+      "strategicOrientation": {"title": "Orientation Stratégique", "description": "Évaluez l'alignement de votre stratégie achats avec les objectifs d'entreprise."},
+      "supplierManagement": {"title": "Gestion Fournisseurs", "description": "Analysez votre approche de la gestion des relations fournisseurs et du SRM."},
+      "categorySegmentation": {"title": "Segmentation Kraljic", "description": "Optimisez votre matrice de segmentation des catégories d'achats."},
+      "maturityMmcm": {"title": "Maturité MMCM", "description": "Évaluation complète de la maturité de votre fonction achats selon le modèle MMCM."}
     }
   },
   "account": {

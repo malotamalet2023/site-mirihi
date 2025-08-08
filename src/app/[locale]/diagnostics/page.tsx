@@ -1,77 +1,61 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 
-export default function DiagnosticsPage() {
+type Props = {
+  params: { locale: string };
+};
+
+export default async function DiagnosticsPage({ params }: Props) {
+  const { locale } = params;
+  const t = await getTranslations({ locale });
+
   const modules = [
     {
       id: 'strategic-orientation',
-      title: 'Orientation Stratégique',
-      description: 'Évaluez l\'alignement de votre fonction achats avec la stratégie d\'entreprise',
+      title: t('resources.diagnostics.strategicOrientation.title'),
+      description: t('resources.diagnostics.strategicOrientation.description'),
       icon: '🎯',
       duration: '15-20 min',
-      questions: '25-30 questions',
+      questions: '25-30',
       color: 'blue'
     },
     {
       id: 'category-segmentation',
-      title: 'Segmentation Catégories',
-      description: 'Analysez votre approche de segmentation et gestion par catégories d\'achats',
+      title: t('resources.diagnostics.categorySegmentation.title'),
+      description: t('resources.diagnostics.categorySegmentation.description'),
       icon: '📊',
       duration: '20-25 min',
-      questions: '30-35 questions',
+      questions: '30-35',
       color: 'green'
     },
     {
       id: 'supplier-management',
-      title: 'Gestion Fournisseurs',
-      description: 'Évaluez vos pratiques de sélection, évaluation et gestion des fournisseurs',
+      title: t('resources.diagnostics.supplierManagement.title'),
+      description: t('resources.diagnostics.supplierManagement.description'),
       icon: '🤝',
       duration: '18-22 min',
-      questions: '28-32 questions',
+      questions: '28-32',
       color: 'purple'
     },
     {
       id: 'procurement-maturity',
-      title: 'Maturité MMCM',
-      description: 'Diagnostic complet basé sur le modèle de maturité achats MMCM',
+      title: t('resources.diagnostics.maturityMmcm.title'),
+      description: t('resources.diagnostics.maturityMmcm.description'),
       icon: '📈',
       duration: '25-30 min',
-      questions: '35-40 questions',
+      questions: '35-40',
       color: 'orange'
     }
   ];
 
   const getColorClasses = (color: string) => {
     const colors = {
-      blue: {
-        bg: 'bg-blue-50',
-        border: 'border-blue-200',
-        icon: 'bg-blue-100',
-        text: 'text-blue-600',
-        button: 'bg-blue-600 hover:bg-blue-700'
-      },
-      green: {
-        bg: 'bg-green-50',
-        border: 'border-green-200',
-        icon: 'bg-green-100',
-        text: 'text-green-600',
-        button: 'bg-green-600 hover:bg-green-700'
-      },
-      purple: {
-        bg: 'bg-purple-50',
-        border: 'border-purple-200',
-        icon: 'bg-purple-100',
-        text: 'text-purple-600',
-        button: 'bg-purple-600 hover:bg-purple-700'
-      },
-      orange: {
-        bg: 'bg-orange-50',
-        border: 'border-orange-200',
-        icon: 'bg-orange-100',
-        text: 'text-orange-600',
-        button: 'bg-orange-600 hover:bg-orange-700'
-      }
-    };
-    return colors[color as keyof typeof colors] || colors.blue;
+      blue: { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'bg-blue-100', text: 'text-blue-600', button: 'bg-blue-600 hover:bg-blue-700' },
+      green: { bg: 'bg-green-50', border: 'border-green-200', icon: 'bg-green-100', text: 'text-green-600', button: 'bg-green-600 hover:bg-green-700' },
+      purple: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'bg-purple-100', text: 'text-purple-600', button: 'bg-purple-600 hover:bg-purple-700' },
+      orange: { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'bg-orange-100', text: 'text-orange-600', button: 'bg-orange-600 hover:bg-orange-700' }
+    } as const;
+    return (colors as any)[color] || colors.blue;
   };
 
   return (
@@ -80,27 +64,26 @@ export default function DiagnosticsPage() {
         {/* Header avec retour */}
         <div className="mb-8">
           <Link
-            href="/fr"
+            href={`/${locale}`}
             className="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center space-x-2 mb-6"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            <span>Retour à l&apos;accueil</span>
+            <span>{t('diagnostic.back')}</span>
           </Link>
 
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Diagnostics Achats Détaillés</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('modules.title')}</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choisissez le module de diagnostic qui correspond à vos besoins spécifiques. 
-              Chaque module offre une analyse approfondie avec des recommandations personnalisées.
+              {t('modules.subtitle')}
             </p>
           </div>
         </div>
 
         {/* Diagnostic d'orientation en premier */}
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">Commencer par l&apos;orientation</h2>
+          <h2 className="text-2xl font-semibold mb-6">{t('modules.intelligentDiagnostic.title')}</h2>
           <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-mirihi-blue-1/20">
             <div className="flex items-center justify-between">
               <div className="flex-1">
@@ -109,26 +92,23 @@ export default function DiagnosticsPage() {
                     🧭
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">Diagnostic d&apos;Orientation Adaptatif</h3>
-                    <p className="text-gray-600">Recommandé pour débuter</p>
+                    <h3 className="text-2xl font-bold text-gray-900">{t('diagnostic.title')}</h3>
+                    <p className="text-gray-600">{t('home.orientationDiagnostic')}</p>
                   </div>
                 </div>
-                <p className="text-gray-700 mb-4">
-                  Un diagnostic intelligent qui évalue 12 domaines clés des achats modernes et s&apos;adapte à votre profil pour identifier les modules 
-                  les plus pertinents à votre situation. Inclut les nouveaux enjeux : achats responsables, digitalisation, et gestion de la performance.
-                </p>
+                <p className="text-gray-700 mb-4">{t('home.description')}</p>
                 <div className="flex items-center space-x-6 text-sm text-gray-600">
-                  <span>⏱️ 5-8 minutes</span>
-                  <span>❓ 12 catégories d'évaluation</span>
-                  <span>🎯 Recommandations personnalisées</span>
+                  <span>⏱️ 5-8 min</span>
+                  <span>❓ 12 {t('diagnostic.questions')}</span>
+                  <span>🎯 {t('diagnostic.recommendations')}</span>
                 </div>
               </div>
               <div className="ml-8">
                 <Link
-                  href="/fr"
+                  href={`/${locale}`}
                   className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-mirihi-blue-1 to-mirihi-teal text-white font-semibold rounded-xl hover:shadow-lg transition-all"
                 >
-                  Commencer l&apos;orientation
+                  {t('home.startDiagnostic')}
                   <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -140,7 +120,7 @@ export default function DiagnosticsPage() {
 
         {/* Modules détaillés */}
         <div>
-          <h2 className="text-2xl font-semibold mb-6">Diagnostics détaillés par module</h2>
+          <h2 className="text-2xl font-semibold mb-6">{t('modules.seeAllDiagnostics')}</h2>
           <div className="grid lg:grid-cols-2 gap-8">
             {modules.map((module) => {
               const colors = getColorClasses(module.color);
@@ -161,18 +141,18 @@ export default function DiagnosticsPage() {
 
                   <div className="flex items-center justify-between text-sm text-gray-600 mb-6">
                     <span>⏱️ {module.duration}</span>
-                    <span>❓ {module.questions}</span>
+                    <span>❓ {module.questions} {t('diagnostic.questions')}</span>
                   </div>
 
                   <div className="flex space-x-3">
                     <Link
-                      href="/fr/diagnostics/modular"
+                      href={`/${locale}/diagnostics/modular`}
                       className={`flex-1 ${colors.button} text-white font-semibold py-2 px-4 rounded-lg transition-colors text-center`}
                     >
-                      Commencer
+                      {t('resources.startDiagnostic')}
                     </Link>
                     <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      Aperçu
+                      {t('diagnostic.learnMore')}
                     </button>
                   </div>
                 </div>
@@ -183,11 +163,8 @@ export default function DiagnosticsPage() {
 
         {/* Note explicative */}
         <div className="mt-12 bg-blue-50 rounded-xl p-6 text-center">
-          <h3 className="text-lg font-semibold mb-2">Comment choisir ?</h3>
-          <p className="text-gray-700">
-            Si vous ne savez pas par où commencer, nous recommandons de débuter par le 
-            <strong> Diagnostic d&apos;Orientation</strong> qui vous guidera vers les modules les plus adaptés à votre situation.
-          </p>
+          <h3 className="text-lg font-semibold mb-2">{t('modules.intelligentDiagnostic.title')}</h3>
+          <p className="text-gray-700">{t('home.description')}</p>
         </div>
       </div>
     </div>

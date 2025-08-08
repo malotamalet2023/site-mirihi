@@ -1,14 +1,12 @@
 import createMiddleware from 'next-intl/middleware';
+import { locales, defaultLocale } from './lib/i18n-config';
 
 export default createMiddleware({
-  // A list of all locales that are supported
-  locales: ['en', 'es', 'fr'],
-
-  // Used when no locale matches
-  defaultLocale: 'fr'
+  locales: [...locales],
+  defaultLocale,
+  localeDetection: true
 });
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ['/', '/((?!api|_next|_vercel|favicon.ico|apple-touch-icon|.*\\..*).*)']
+  matcher: ['/', '/(fr|en|es)(/.*)?', '/((?!api|_next|_vercel|favicon.ico|apple-touch-icon|.*\\..*).*)']
 };

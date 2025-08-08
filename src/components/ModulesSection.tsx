@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
-export async function ModulesSection() {
+interface Props { params?: { locale?: string } }
+
+export async function ModulesSection({ params }: Props = {}) {
   const t = await getTranslations();
+  const locale = params?.locale && ['fr','en','es'].includes(params.locale) ? params.locale : 'fr';
 
   return (
     <section className="py-16 -mt-8 relative z-10">
@@ -84,7 +87,7 @@ export async function ModulesSection() {
 
           <div className="text-center mb-8">
             <Link
-              href="/diagnostics"
+              href={`/${locale}/diagnostics`}
               className="inline-flex items-center px-8 py-4 bg-mirihi-lime-1 text-mirihi-blue-1 font-bold text-lg rounded-2xl hover:bg-mirihi-lime-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +99,7 @@ export async function ModulesSection() {
 
           <div className="text-center">
             <Link
-              href="/resources"
+              href={`/${locale}/resources`}
               className="inline-flex items-center px-6 py-3 border-2 border-mirihi-blue-1 text-mirihi-blue-1 font-semibold rounded-2xl hover:bg-mirihi-blue-1 hover:text-white transition-all duration-300"
             >
               {t('modules.seeAllDiagnostics')}

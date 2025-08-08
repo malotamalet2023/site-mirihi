@@ -20,6 +20,7 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
+import { useTranslations } from 'next-intl';
 
 interface OrientationDiagnosticProps {
   onComplete?: (result: DiagnosticResult) => void;
@@ -27,6 +28,7 @@ interface OrientationDiagnosticProps {
 }
 
 export default function OrientationDiagnostic({ onComplete, autoStart = false }: OrientationDiagnosticProps) {
+  const t = useTranslations();
   const [engine, setEngine] = useState(() => new OrientationDiagnosticEngine());
   const [currentQuestion, setCurrentQuestion] = useState<DiagnosticQuestion | null>(null);
   const [isStarted, setIsStarted] = useState(autoStart);
@@ -138,16 +140,10 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-6"></div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">
-            Analyse en cours...
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Notre IA analyse vos réponses et génère vos recommandations personnalisées
-          </p>
+          <h3 className="text-xl font-bold text-gray-800 mb-2">{t('diagnostic.analyzing')}</h3>
+          <p className="text-gray-600 mb-4">{t('home.description')}</p>
           <div className="bg-blue-50 p-3 rounded-lg">
-            <p className="text-sm text-blue-700">
-              🤖 Utilisation de Gemini AI pour une analyse approfondie
-            </p>
+            <p className="text-sm text-blue-700">🤖 Gemini AI</p>
           </div>
         </div>
       </div>
@@ -170,39 +166,36 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
                 </svg>
               </div>
               
-              <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                Diagnostic d'Orientation Adaptatif
-              </h1>
+              <h1 className="text-4xl font-bold text-gray-800 mb-4">{t('diagnostic.adaptiveTitle')}</h1>
               
               <p className="text-xl text-gray-600 mb-6">
-                Évaluez 12 domaines clés d'excellence achats en 5 minutes avec notre IA
+                {t('diagnostic.introTagline')}
               </p>
-              
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 mb-8">
                 <h3 className="font-bold text-blue-800 mb-3 flex items-center justify-center">
                   <span className="mr-2">🧠</span>
-                  Diagnostic Intelligent & Adaptatif
+                  {t('diagnostic.intelligentBadge')}
                 </h3>
                 <div className="grid md:grid-cols-3 gap-4 text-left">
                   <div className="flex items-start space-x-3">
                     <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">1</span>
                     <div>
-                      <p className="text-blue-800 font-semibold">Questions adaptées</p>
-                      <p className="text-blue-600 text-sm">Le diagnostic s'adapte à vos réponses</p>
+                      <p className="text-blue-800 font-semibold">{t('diagnostic.stepQuestions')}</p>
+                      <p className="text-blue-600 text-sm">{t('diagnostic.stepQuestionsInfo')}</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">2</span>
                     <div>
-                      <p className="text-blue-800 font-semibold">Analyse IA</p>
-                      <p className="text-blue-600 text-sm">Gemini AI analyse vos réponses</p>
+                      <p className="text-blue-800 font-semibold">{t('diagnostic.stepAI')}</p>
+                      <p className="text-blue-600 text-sm">{t('diagnostic.stepAIInfo')}</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mt-0.5">3</span>
                     <div>
-                      <p className="text-blue-800 font-semibold">Recommandations</p>
-                      <p className="text-blue-600 text-sm">Diagnostics personnalisés suggérés</p>
+                      <p className="text-blue-800 font-semibold">{t('diagnostic.stepRecommendations')}</p>
+                      <p className="text-blue-600 text-sm">{t('diagnostic.stepRecommendationsInfo')}</p>
                     </div>
                   </div>
                 </div>
@@ -216,11 +209,11 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
                 <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Commencer le diagnostic
+                {t('diagnostic.start')}
               </button>
               
               <p className="text-sm text-gray-500 mt-4">
-                ⏱️ Durée estimée : 5 minutes • 🎯 12 catégories d'évaluation • 📊 Analyse IA
+                ⏱️ {t('diagnostic.duration')} : 5 minutes • 🎯 12 {t('diagnostic.questions')} • 📊 {t('diagnostic.stepAI')}
               </p>
             </div>
           </div>
@@ -233,7 +226,7 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <p className="text-gray-600">Chargement de la question suivante...</p>
+          <p className="text-gray-600">{t('diagnostic.loadingNextQuestion')}</p>
         </div>
       </div>
     );
@@ -247,14 +240,14 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
           <div className="mb-8">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-800">
-                Diagnostic d'Orientation
+                {t('diagnostic.title')}
               </h2>
               <div className="text-right">
                 <div className="text-sm text-gray-500">
-                  Question {progress.current} sur {progress.total}
+                  {t('diagnostic.progressQuestionFull', { current: progress.current, total: progress.total })}
                 </div>
                 <div className="text-sm text-gray-500">
-                  Temps estimé restant : {Math.max(1, Math.ceil((progress.total - progress.current + 1) * 0.8))} min
+                  {t('diagnostic.progressEstimatedTime')}: {Math.max(1, Math.ceil((progress.total - progress.current + 1) * 0.8))} min
                 </div>
               </div>
             </div>
@@ -269,8 +262,7 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
             
             <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
               <p className="text-blue-700 text-sm">
-                💡 <strong>Diagnostic adaptatif :</strong> Les questions suivantes s'adapteront selon vos réponses. 
-                Si vous montrez des forces, nous approfondirons moins. Si nous détectons des faiblesses, nous creuserons davantage.
+                💡 <strong>{t('diagnostic.adaptiveInfo')}</strong> {t('diagnostic.adaptiveLong')}
               </p>
             </div>
           </div>
@@ -316,7 +308,7 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
           {/* Information adaptative */}
           <div className="bg-gray-50 p-4 rounded-xl">
             <p className="text-sm text-gray-600">
-              🎯 <strong>Diagnostic intelligent :</strong> Ce diagnostic s'adapte en temps réel à vos réponses pour optimiser votre temps et identifier précisément vos besoins.
+              🎯 <strong>{t('diagnostic.intelligentBadge')}</strong> {t('diagnostic.intelligentInfo')}
             </p>
           </div>
         </div>
@@ -332,6 +324,7 @@ interface ResultsDisplayProps {
 
 function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'radar' | 'recommendations'>('overview');
+  const t = useTranslations();
 
   // Préparer les données pour le graphique radar
   const radarData = Object.entries(result.categoryScores).map(([category, data]: [string, any]) => ({
@@ -366,7 +359,7 @@ function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
             </div>
             
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
-              Résultats de votre Diagnostic d'Orientation
+              {t('diagnostic.resultsTitle')}
             </h1>
             
             <div className="flex items-center justify-center space-x-6 mb-6">
@@ -374,28 +367,28 @@ function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
                 <div className="text-4xl font-bold text-blue-600">
                   {result.overallPercentage}%
                 </div>
-                <div className="text-sm text-gray-600">Score Global</div>
+                <div className="text-sm text-gray-600">{t('diagnostic.scoreGlobal')}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-gray-800 capitalize">
                   {result.overallLevel}
                 </div>
-                <div className="text-sm text-gray-600">Niveau de Maturité</div>
+                <div className="text-sm text-gray-600">{t('diagnostic.maturityLevel')}</div>
               </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-green-50 p-4 rounded-xl">
                 <div className="text-lg font-bold text-green-700">{result.strengths.length}</div>
-                <div className="text-sm text-green-600">Points Forts</div>
+                <div className="text-sm text-green-600">{t('diagnostic.strengthsLabel')}</div>
               </div>
               <div className="bg-orange-50 p-4 rounded-xl">
                 <div className="text-lg font-bold text-orange-700">{result.weaknesses.length}</div>
-                <div className="text-sm text-orange-600">Axes d'Amélioration</div>
+                <div className="text-sm text-orange-600">{t('diagnostic.weaknessesLabel')}</div>
               </div>
               <div className="bg-blue-50 p-4 rounded-xl">
                 <div className="text-lg font-bold text-blue-700">{result.recommendedDiagnostics.length}</div>
-                <div className="text-sm text-blue-600">Diagnostics Recommandés</div>
+                <div className="text-sm text-blue-600">{t('diagnostic.recommendedDiagnosticsLabel')}</div>
               </div>
             </div>
           </div>
@@ -406,9 +399,9 @@ function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
           <div className="border-b border-gray-200">
             <nav className="flex space-x-8 px-8 pt-6">
               {[
-                { id: 'overview', label: 'Vue d\'ensemble', icon: '📊' },
-                { id: 'radar', label: 'Graphiques', icon: '📈' },
-                { id: 'recommendations', label: 'Recommandations', icon: '🎯' }
+                { id: 'overview', label: t('diagnostic.tabOverview'), icon: '📊' },
+                { id: 'radar', label: t('diagnostic.tabRadar'), icon: '📈' },
+                { id: 'recommendations', label: t('diagnostic.tabRecommendations'), icon: '🎯' }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -440,13 +433,13 @@ function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
             onClick={onRestart}
             className="bg-gray-600 text-white px-6 py-3 rounded-xl hover:bg-gray-700 transition-colors"
           >
-            Nouveau Diagnostic
+            {t('diagnostic.newDiagnostic')}
           </button>
           <button
             onClick={() => window.print()}
             className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
           >
-            Imprimer les Résultats
+            {t('diagnostic.printResults')}
           </button>
         </div>
       </div>
@@ -458,13 +451,14 @@ function OverviewTab({ result, setActiveTab }: {
   result: DiagnosticResult; 
   setActiveTab: (tab: 'overview' | 'radar' | 'recommendations') => void;
 }) {
+  const t = useTranslations();
   return (
     <div className="space-y-8">
       {/* Forces et Faiblesses */}
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-lg font-semibold text-green-700 mb-4">
-            ✅ Vos Points Forts
+            ✅ {t('diagnostic.yourStrengths')}
           </h3>
           {result.strengths.length > 0 ? (
             <ul className="space-y-2">
@@ -477,14 +471,14 @@ function OverviewTab({ result, setActiveTab }: {
             </ul>
           ) : (
             <p className="text-gray-600 italic bg-gray-50 p-4 rounded-lg">
-              Aucun point fort significatif identifié. Opportunité d'amélioration globale.
+              {t('diagnostic.fallbackStrengthsNone')}
             </p>
           )}
         </div>
         
         <div>
           <h3 className="text-lg font-semibold text-orange-700 mb-4">
-            🎯 Axes d'Amélioration
+            🎯 {t('diagnostic.yourWeaknesses')}
           </h3>
           {result.weaknesses.length > 0 ? (
             <ul className="space-y-2">
@@ -497,7 +491,7 @@ function OverviewTab({ result, setActiveTab }: {
             </ul>
           ) : (
             <p className="text-gray-600 italic bg-gray-50 p-4 rounded-lg">
-              Excellente performance globale ! Continuez sur cette lancée.
+              {t('diagnostic.fallbackWeaknessesExcellent')}
             </p>
           )}
         </div>
@@ -514,7 +508,7 @@ function OverviewTab({ result, setActiveTab }: {
             </div>
             <div className="flex-1">
               <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center">
-                🤖 Analyse IA avec Recherche Google
+                🤖 {t('diagnostic.aiAnalysisTitle')}
                 <span className="ml-2 text-sm bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-3 py-1 rounded-full font-semibold">Gemini 2.5 Flash</span>
               </h3>
               <div className="flex items-center space-x-4 mb-4">
@@ -522,13 +516,13 @@ function OverviewTab({ result, setActiveTab }: {
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  Enrichi par Google Search
+                  {t('diagnostic.aiAnalysisEnriched')}
                 </p>
                 <p className="text-sm text-blue-600 font-medium flex items-center">
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  Tendances {new Date().getFullYear()}
+                  {t('diagnostic.aiAnalysisTrends', { year: new Date().getFullYear() })}
                 </p>
               </div>
               <div className="bg-white rounded-xl p-5 shadow-sm border border-purple-100">
@@ -541,13 +535,13 @@ function OverviewTab({ result, setActiveTab }: {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Analyse basée sur les meilleures pratiques actuelles du marché</span>
+                  <span>{t('diagnostic.bestPracticesNote')}</span>
                 </div>
                 <button 
                   onClick={() => setActiveTab('recommendations')}
                   className="text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors font-medium"
                 >
-                  Voir recommandations détaillées →
+                  {t('diagnostic.seeDetailedRecommendations')} →
                 </button>
               </div>
             </div>
@@ -558,7 +552,7 @@ function OverviewTab({ result, setActiveTab }: {
       {/* Détail des scores par catégorie */}
       <div>
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          📈 Détail par Catégorie
+          {t('diagnostic.categoryDetailTitle')}
         </h3>
         <div className="grid gap-4">
           {Object.entries(result.categoryScores).map(([category, data]: [string, any]) => (
@@ -597,12 +591,13 @@ function OverviewTab({ result, setActiveTab }: {
 }
 
 function ChartsTab({ radarData, barData }: { radarData: any[], barData: any[] }) {
+  const t = useTranslations();
   return (
     <div className="space-y-8">
       {/* Graphique Radar */}
       <div>
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          🎯 Graphique Radar - Vue d'ensemble
+          {t('diagnostic.radarChartTitle')}
         </h3>
         <div className="bg-gray-50 rounded-xl p-6">
           <ResponsiveContainer width="100%" height={450}>
@@ -637,7 +632,7 @@ function ChartsTab({ radarData, barData }: { radarData: any[], barData: any[] })
       {/* Graphique en Barres */}
       <div>
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          📊 Graphique en Barres - Détail des scores
+          {t('diagnostic.barChartTitle')}
         </h3>
         <div className="bg-gray-50 rounded-xl p-6">
           <ResponsiveContainer width="100%" height={400}>
@@ -687,6 +682,7 @@ function ChartsTab({ radarData, barData }: { radarData: any[], barData: any[] })
 }
 
 function RecommendationsTab({ result }: { result: DiagnosticResult }) {
+  const t = useTranslations();
   return (
     <div className="space-y-8">
       {/* Analyse Approfondie IA Gemini */}
@@ -700,10 +696,10 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-800">
-                🤖 Analyse Approfondie par Intelligence Artificielle
+                🤖 {t('diagnostic.deepAIAnalysisTitle')}
               </h3>
               <p className="text-sm text-purple-600 font-medium">
-                Analyse contextuelle enrichie avec recherche sur les tendances actuelles
+                {t('diagnostic.deepAIAnalysisSubtitle')}
               </p>
             </div>
           </div>
@@ -744,7 +740,7 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
       {/* Diagnostics Recommandés */}
       <div>
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          🎯 Diagnostics Recommandés pour Vous
+          🎯 {t('diagnostic.recommendedDiagnosticsForYou')}
         </h3>
         {result.recommendedDiagnostics.length > 0 ? (
           <div className="grid gap-4">
@@ -762,14 +758,14 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
                 </div>
                 <p className="text-gray-600 mb-4">{diagnostic.reason}</p>
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  Commencer ce diagnostic
+                  {t('diagnostic.startThisDiagnostic')}
                 </button>
               </div>
             ))}
           </div>
         ) : (
           <p className="text-gray-600 italic bg-gray-50 p-4 rounded-lg">
-            Aucun diagnostic spécifique requis. Votre niveau est satisfaisant dans tous les domaines.
+            {t('diagnostic.noSpecificDiagnostics')}
           </p>
         )}
       </div>
@@ -778,7 +774,7 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
       {result.recommendations && result.recommendations.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            💡 Recommandations Personnalisées
+            💡 {t('diagnostic.aiPersonalizedRecommendations')}
           </h3>
           <div className="space-y-3">
             {result.recommendations.map((recommendation, index) => (
@@ -797,7 +793,7 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
       {result.nextSteps && result.nextSteps.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            🚀 Prochaines Étapes Suggérées
+            🚀 {t('diagnostic.nextStepsSuggested')}
           </h3>
           <div className="space-y-3">
             {result.nextSteps.map((step, index) => (

@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
+const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
-  // config options here
+  experimental: {
+    // S'assurer que Next peut localiser la config next-intl à la racine
+  }
 };
 
 export default withNextIntl(nextConfig);

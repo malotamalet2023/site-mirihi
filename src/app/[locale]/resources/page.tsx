@@ -1,7 +1,10 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function ResourcesPage() {
-  const t = useTranslations();
+type Props = { params: { locale: string } };
+
+export default async function ResourcesPage({ params }: Props) {
+  const { locale } = params;
+  const t = await getTranslations({ locale });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-mirihi-blue-1/10">
