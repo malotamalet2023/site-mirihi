@@ -87,7 +87,7 @@ export async function ModulesSection({ params }: Props = {}) {
 
           <div className="text-center mb-8">
             <Link
-              href={`/${locale}/diagnostics`}
+              href={`/${locale}/orientation`}
               className="inline-flex items-center px-8 py-4 bg-mirihi-lime-1 text-mirihi-blue-1 font-bold text-lg rounded-2xl hover:bg-mirihi-lime-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -137,7 +137,9 @@
     "recommendedDiagnosticsForYou": "Recommended Diagnostics for You",
     "startThisDiagnostic": "Start this diagnostic",
     "noSpecificDiagnostics": "No specific diagnostic required. Your level is satisfactory across all areas.",
-    "nextStepsSuggested": "Suggested Next Steps"
+    "nextStepsSuggested": "Suggested Next Steps",
+    "next": "Next",
+    "chooseOption": "Choose a value"
   },
   "resources": {
     "title": "Our Resources",
@@ -151,6 +153,11 @@
     "advanced": "Advanced",
     "expert": "Expert",
     "startDiagnostic": "Start",
+    "modulesIntro": "Explore our specialized diagnostic modules to analyze specific aspects of your procurement processes in depth.",
+    "tipChoose": "Choose the module that matches your specific needs",
+    "tipAdaptive": "Each diagnostic adapts to your maturity level",
+    "tipReport": "Get a detailed report with personalized recommendations",
+    "diagnosticsList": "Available diagnostics list",
     "diagnostics": {
       "orientation": {
         "title": "Orientation Diagnostic",
@@ -172,6 +179,16 @@
         "title": "MMCM Maturity",
         "description": "Complete assessment of your procurement function maturity according to the MMCM model."
       }
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Name or description",
+      "categoryLabel": "Category",
+      "categoryAll": "All",
+      "sortLabel": "Sort",
+      "sortQuestions": "# questions",
+      "sortAlpha": "Alphabetical",
+      "empty": "No module found."
     }
   },
   "account": {
@@ -179,7 +196,53 @@
     "accessCode": "Access Code",
     "login": "Login",
     "enterCode": "Enter your access code",
-    "invalidCode": "Invalid access code"
+    "invalidCode": "Invalid access code",
+    "secureAccessTitle": "Secure Access",
+    "loginDescription": "Enter your access code or email to view diagnostics stored on this device.",
+    "placeholderCodeOrEmail": "Code or email",
+    "continue": "Continue",
+    "prototypeNote": "Prototype: no data sent to server.",
+    "myDiagnostics": "My diagnostics",
+    "localResultsCount": "{count} results stored locally",
+    "filterAllTypes": "All types",
+    "filterOrientation": "Orientation",
+    "clear": "Clear",
+    "noDiagnostics": "No diagnostics stored yet.",
+    "launchDiagnostic": "Launch a diagnostic",
+    "orientationDiagnosticShort": "Orientation Diagnostic",
+    "score": "Score",
+    "level": "Level",
+    "viewReport": "View report",
+    "recommendationsTitle": "Diagnostic recommendations",
+    "launch": "Launch",
+    "details": "Details",
+    "noRecommendations": "No recommendations available at this time.",
+    "recommendationsLabel": "Recommendations:"
+  },
+  "levels": {
+    "basic": "Basic",
+    "intermediate": "Intermediate", 
+    "advanced": "Advanced",
+    "leader": "Leader"
+  },
+  "categories": {
+    "engagementDirection": "Management Engagement & Strategy",
+    "relationsPartenaires": "Internal Partner Relations", 
+    "gestionCategories": "Category Management",
+    "collaborationInnovation": "Supplier Collaboration & Innovation",
+    "organisationProcessus": "Organization & Processes",
+    "gestionContrats": "Contract Management",
+    "sourcingStrategique": "Strategic Sourcing",
+    "gestionRisques": "Risk Management",
+    "gestionTalents": "Talent Management",
+    "achatsResponsables": "Responsible Procurement",
+    "digitalisationAchats": "Procurement Digitalization",
+    "gestionPerformance": "Performance Management"
+  },
+  "priorities": {
+    "urgent": "Urgent",
+    "important": "Important",
+    "recommended": "Recommended"
   },
   "common": {
     "language": "Language",

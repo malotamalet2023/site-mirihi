@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
-export async function ServicesSection() {
-  const t = await getTranslations();
+interface ServicesSectionProps { locale: string }
 
+export async function ServicesSection({ locale }: ServicesSectionProps) {
+  const t = await getTranslations();
   return (
     <section className="py-20 bg-gradient-to-br from-white to-mirihi-blue-1/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,7 +31,7 @@ export async function ServicesSection() {
               {t('services.resources.description')}
             </p>
             <Link 
-              href="/resources" 
+              href={`/${locale}/resources`} 
               className="inline-flex items-center text-mirihi-blue-1 hover:text-mirihi-blue-2 font-semibold transition-colors group"
             >
               <span>{t('services.resources.cta')}</span>
@@ -53,7 +54,7 @@ export async function ServicesSection() {
               {t('services.account.description')}
             </p>
             <Link 
-              href="/account" 
+              href={`/${locale}/account`} 
               className="inline-flex items-center text-mirihi-green-1 hover:text-mirihi-green-2 font-semibold transition-colors group"
             >
               <span>{t('services.account.cta')}</span>

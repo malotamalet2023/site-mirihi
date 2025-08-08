@@ -52,26 +52,57 @@ function getMaturityLevel(score: number): string {
   return 'Débutant';
 }
 
-function formatCategoryName(category: string): string {
-  const categoryMappings: Record<string, string> = {
-    'engagementDirection': 'Engagement Direction & Stratégie',
-    'relationsPartenaires': 'Relations avec Partenaires Internes',
-    'gestionCategories': 'Gestion par Catégories',
-    'collaborationInnovation': 'Collaboration et Innovation Fournisseurs',
-    'organisationProcessus': 'Organisation et Processus',
-    'gestionContrats': 'Gestion des Contrats',
-    'sourcingStrategique': 'Sourcing Stratégique',
-    'gestionRisques': 'Gestion des Risques',
-    'gestionTalents': 'Gestion des Talents',
-    'achatsResponsables': 'Achats Responsables',
-    'digitalisationAchats': 'Digitalisation des Achats',
-    'gestionPerformance': 'Gestion de la Performance'
+function formatCategoryName(category: string, locale: string = 'fr'): string {
+  const categoryMappings: Record<string, Record<string, string>> = {
+    fr: {
+      'engagementDirection': 'Engagement Direction & Stratégie',
+      'relationsPartenaires': 'Relations avec Partenaires Internes',
+      'gestionCategories': 'Gestion par Catégories',
+      'collaborationInnovation': 'Collaboration et Innovation Fournisseurs',
+      'organisationProcessus': 'Organisation et Processus',
+      'gestionContrats': 'Gestion des Contrats',
+      'sourcingStrategique': 'Sourcing Stratégique',
+      'gestionRisques': 'Gestion des Risques',
+      'gestionTalents': 'Gestion des Talents',
+      'achatsResponsables': 'Achats Responsables',
+      'digitalisationAchats': 'Digitalisation des Achats',
+      'gestionPerformance': 'Gestion de la Performance'
+    },
+    en: {
+      'engagementDirection': 'Management Engagement & Strategy',
+      'relationsPartenaires': 'Internal Partner Relations',
+      'gestionCategories': 'Category Management',
+      'collaborationInnovation': 'Supplier Collaboration & Innovation',
+      'organisationProcessus': 'Organization & Processes',
+      'gestionContrats': 'Contract Management',
+      'sourcingStrategique': 'Strategic Sourcing',
+      'gestionRisques': 'Risk Management',
+      'gestionTalents': 'Talent Management',
+      'achatsResponsables': 'Responsible Procurement',
+      'digitalisationAchats': 'Procurement Digitalization',
+      'gestionPerformance': 'Performance Management'
+    },
+    es: {
+      'engagementDirection': 'Compromiso Dirección & Estrategia',
+      'relationsPartenaires': 'Relaciones con Socios Internos',
+      'gestionCategories': 'Gestión por Categorías',
+      'collaborationInnovation': 'Colaboración e Innovación con Proveedores',
+      'organisationProcessus': 'Organización y Procesos',
+      'gestionContrats': 'Gestión de Contratos',
+      'sourcingStrategique': 'Sourcing Estratégico',
+      'gestionRisques': 'Gestión de Riesgos',
+      'gestionTalents': 'Gestión del Talento',
+      'achatsResponsables': 'Compras Responsables',
+      'digitalisationAchats': 'Digitalización de Compras',
+      'gestionPerformance': 'Gestión del Rendimiento'
+    }
   };
   
-  return categoryMappings[category] || category
+  const localeMapping = categoryMappings[locale] || categoryMappings['fr'];
+  return localeMapping[category] || category
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, str => str.toUpperCase())
-    .trim();;
+    .trim();
 }
 
 function getPerformanceIndicator(score: number): string {
@@ -82,13 +113,13 @@ function getPerformanceIndicator(score: number): string {
   return '❌ Critique';
 }
 
-function generateContextualPrompt(data: DiagnosticData): string {
+function generateContextualPrompt(data: DiagnosticData, locale: string = 'fr'): string {
   const { overallScore, categoryScores } = data;
   
   // Analyse des domaines critiques et excellents
   const categoryAnalysis = Object.entries(categoryScores)
     .map(([category, score]) => ({
-      name: formatCategoryName(category),
+      name: formatCategoryName(category, locale),
       percentage: score.percentage,
       level: score.level
     }))
@@ -227,12 +258,12 @@ async function performGeminiAnalysis(data: DiagnosticData): Promise<AIAnalysisRe
   }
 }
 
-function generateFallbackAnalysis(data: DiagnosticData): AIAnalysisResult {
+function generateFallbackAnalysis(data: DiagnosticData, locale: string = 'fr'): AIAnalysisResult {
   const { overallScore, categoryScores } = data;
   
   const categoryAnalysis = Object.entries(categoryScores)
     .map(([category, score]) => ({
-      name: formatCategoryName(category),
+      name: formatCategoryName(category, locale),
       percentage: score.percentage
     }))
     .sort((a, b) => b.percentage - a.percentage);
@@ -292,9 +323,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Détecter la locale depuis l'URL ou les headers
+    const url = new URL(request.url);
+    const pathLocale = url.pathname.split('/')[1];
+    const locale = ['fr', 'en', 'es'].includes(pathLocale) ? pathLocale : 'fr';
+
     console.log('📊 Données diagnostic reçues:', {
       score: diagnosticData.overallScore,
-      categories: Object.keys(diagnosticData.categoryScores).length
+      categories: Object.keys(diagnosticData.categoryScores).length,
+      locale
     });
 
     let analysisResult: AIAnalysisResult;
@@ -306,11 +343,11 @@ export async function POST(request: NextRequest) {
         analysisResult = await performGeminiAnalysis(diagnosticData);
       } catch (geminiError) {
         console.warn('⚠️ Erreur Gemini, utilisation du fallback:', geminiError);
-        analysisResult = generateFallbackAnalysis(diagnosticData);
+        analysisResult = generateFallbackAnalysis(diagnosticData, locale);
       }
     } else {
       console.log('📋 Utilisation de l\'analyse fallback (pas d\'API key)');
-      analysisResult = generateFallbackAnalysis(diagnosticData);
+      analysisResult = generateFallbackAnalysis(diagnosticData, locale);
     }
 
     // Transformation pour compatibilité avec le format attendu par le frontend

@@ -108,7 +108,9 @@
     "recommendedDiagnosticsForYou": "Diagnostics Recommandés pour Vous",
     "startThisDiagnostic": "Commencer ce diagnostic",
     "noSpecificDiagnostics": "Aucun diagnostic spécifique requis. Votre niveau est satisfaisant dans tous les domaines.",
-    "nextStepsSuggested": "Prochaines Étapes Suggérées"
+    "nextStepsSuggested": "Prochaines Étapes Suggérées",
+    "next": "Suivant",
+    "chooseOption": "Choisissez une valeur"
   },
   "resources": {
     "title": "Nos ressources",
@@ -122,12 +124,27 @@
     "advanced": "Avancé",
     "expert": "Expert",
     "startDiagnostic": "Commencer",
+    "modulesIntro": "Explorez nos modules de diagnostic spécialisés pour analyser en profondeur des aspects spécifiques de vos processus d'achat.",
+    "tipChoose": "Choisissez le module qui correspond à vos besoins spécifiques",
+    "tipAdaptive": "Chaque diagnostic s'adapte à votre niveau de maturité",
+    "tipReport": "Obtenez un rapport détaillé avec recommandations personnalisées",
+    "diagnosticsList": "Liste des diagnostics disponibles",
     "diagnostics": {
       "orientation": {"title": "Diagnostic d'Orientation", "description": "Identifiez vos besoins spécifiques avec notre diagnostic adaptatif intelligent en 5 minutes."},
       "strategicOrientation": {"title": "Orientation Stratégique", "description": "Évaluez l'alignement de votre stratégie achats avec les objectifs d'entreprise."},
       "supplierManagement": {"title": "Gestion Fournisseurs", "description": "Analysez votre approche de la gestion des relations fournisseurs et du SRM."},
       "categorySegmentation": {"title": "Segmentation Kraljic", "description": "Optimisez votre matrice de segmentation des catégories d'achats."},
       "maturityMmcm": {"title": "Maturité MMCM", "description": "Évaluation complète de la maturité de votre fonction achats selon le modèle MMCM."}
+    },
+    "filters": {
+      "searchLabel": "Recherche",
+      "searchPlaceholder": "Nom ou description",
+      "categoryLabel": "Catégorie",
+      "categoryAll": "Toutes",
+      "sortLabel": "Tri",
+      "sortQuestions": "Nb questions",
+      "sortAlpha": "Alphabétique",
+      "empty": "Aucun module trouvé."
     }
   },
   "account": {
@@ -135,7 +152,53 @@
     "accessCode": "Code d'accès",
     "login": "Se connecter",
     "enterCode": "Entrez votre code d'accès",
-    "invalidCode": "Code d'accès invalide"
+    "invalidCode": "Code d'accès invalide",
+    "secureAccessTitle": "Accès sécurisé",
+    "loginDescription": "Entrez votre code d'accès ou email pour consulter vos diagnostics enregistrés sur cet appareil.",
+    "placeholderCodeOrEmail": "Code ou email",
+    "continue": "Continuer",
+    "prototypeNote": "Prototype: aucune donnée envoyée au serveur.",
+    "myDiagnostics": "Mes diagnostics",
+    "localResultsCount": "{count} résultats stockés localement",
+    "filterAllTypes": "Tous les types",
+    "filterOrientation": "Orientation",
+    "clear": "Effacer",
+    "noDiagnostics": "Aucun diagnostic enregistré pour l'instant.",
+    "launchDiagnostic": "Lancer un diagnostic",
+    "orientationDiagnosticShort": "Diagnostic d'Orientation",
+    "score": "Score",
+    "level": "Niveau",
+    "viewReport": "Voir le rapport",
+    "recommendationsTitle": "Recommandations de diagnostics",
+    "launch": "Lancer",
+    "details": "Détails",
+    "noRecommendations": "Aucune recommandation disponible pour le moment.",
+    "recommendationsLabel": "Recommandations:"
+  },
+  "levels": {
+    "basic": "Débutant",
+    "intermediate": "Intermédiaire", 
+    "advanced": "Avancé",
+    "leader": "Expert"
+  },
+  "categories": {
+    "engagementDirection": "Engagement Direction & Stratégie",
+    "relationsPartenaires": "Relations avec Partenaires Internes", 
+    "gestionCategories": "Gestion par Catégories",
+    "collaborationInnovation": "Collaboration et Innovation Fournisseurs",
+    "organisationProcessus": "Organisation et Processus",
+    "gestionContrats": "Gestion des Contrats",
+    "sourcingStrategique": "Sourcing Stratégique",
+    "gestionRisques": "Gestion des Risques",
+    "gestionTalents": "Gestion des Talents",
+    "achatsResponsables": "Achats Responsables",
+    "digitalisationAchats": "Digitalisation des Achats",
+    "gestionPerformance": "Gestion de la Performance"
+  },
+  "priorities": {
+    "urgent": "Urgent",
+    "important": "Important",
+    "recommended": "Recommandé"
   },
   "common": {
     "language": "Langue",

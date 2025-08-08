@@ -21,13 +21,9 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = (await import(`@/messages/${locale}.json`)).default;
   return (
-    <html lang={locale}>
-      <body className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <SimpleHeader />
-          <main className="pt-20">{children}</main>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <SimpleHeader />
+      <main className="pt-20">{children}</main>
+    </NextIntlClientProvider>
   );
 }

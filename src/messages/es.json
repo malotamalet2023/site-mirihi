@@ -137,7 +137,9 @@
     "recommendedDiagnosticsForYou": "Diagnósticos Recomendados para Ti",
     "startThisDiagnostic": "Comenzar este diagnóstico",
     "noSpecificDiagnostics": "No se requiere un diagnóstico específico. Tu nivel es satisfactorio en todas las áreas.",
-    "nextStepsSuggested": "Próximos Pasos Sugeridos"
+    "nextStepsSuggested": "Próximos Pasos Sugeridos",
+    "next": "Siguiente",
+    "chooseOption": "Elige un valor"
   },
   "resources": {
     "title": "Nuestros Recursos",
@@ -151,6 +153,11 @@
     "advanced": "Avanzado",
     "expert": "Experto",
     "startDiagnostic": "Comenzar",
+    "modulesIntro": "Explora nuestros módulos de diagnóstico especializados para analizar en profundidad aspectos específicos de tus procesos de compra.",
+    "tipChoose": "Elige el módulo que corresponda a tus necesidades específicas",
+    "tipAdaptive": "Cada diagnóstico se adapta a tu nivel de madurez",
+    "tipReport": "Obtén un informe detallado con recomendaciones personalizadas",
+    "diagnosticsList": "Lista de diagnósticos disponibles",
     "diagnostics": {
       "orientation": {
         "title": "Diagnóstico de Orientación",
@@ -172,6 +179,16 @@
         "title": "Madurez MMCM",
         "description": "Evaluación completa de la madurez de tu función de compras según el modelo MMCM."
       }
+    },
+    "filters": {
+      "searchLabel": "Búsqueda",
+      "searchPlaceholder": "Nombre o descripción",
+      "categoryLabel": "Categoría",
+      "categoryAll": "Todas",
+      "sortLabel": "Orden",
+      "sortQuestions": "# preguntas",
+      "sortAlpha": "Alfabético",
+      "empty": "Ningún módulo encontrado."
     }
   },
   "account": {
@@ -179,7 +196,53 @@
     "accessCode": "Código de Acceso",
     "login": "Iniciar Sesión",
     "enterCode": "Ingresa tu código de acceso",
-    "invalidCode": "Código de acceso inválido"
+    "invalidCode": "Código de acceso inválido",
+    "secureAccessTitle": "Acceso seguro",
+    "loginDescription": "Ingresa tu código de acceso o email para ver los diagnósticos almacenados en este dispositivo.",
+    "placeholderCodeOrEmail": "Código o email",
+    "continue": "Continuar",
+    "prototypeNote": "Prototipo: no se envían datos al servidor.",
+    "myDiagnostics": "Mis diagnósticos",
+    "localResultsCount": "{count} resultados almacenados localmente",
+    "filterAllTypes": "Todos los tipos",
+    "filterOrientation": "Orientación",
+    "clear": "Borrar",
+    "noDiagnostics": "Ningún diagnóstico almacenado todavía.",
+    "launchDiagnostic": "Lanzar un diagnóstico",
+    "orientationDiagnosticShort": "Diagnóstico de Orientación",
+    "score": "Puntaje",
+    "level": "Nivel",
+    "viewReport": "Ver informe",
+    "recommendationsTitle": "Recomendaciones de diagnósticos",
+    "launch": "Lanzar",
+    "details": "Detalles",
+    "noRecommendations": "No hay recomendaciones disponibles por el momento.",
+    "recommendationsLabel": "Recomendaciones:"
+  },
+  "levels": {
+    "basic": "Básico",
+    "intermediate": "Intermedio", 
+    "advanced": "Avanzado",
+    "leader": "Líder"
+  },
+  "categories": {
+    "engagementDirection": "Compromiso Dirección & Estrategia",
+    "relationsPartenaires": "Relaciones con Socios Internos", 
+    "gestionCategories": "Gestión por Categorías",
+    "collaborationInnovation": "Colaboración e Innovación con Proveedores",
+    "organisationProcessus": "Organización y Procesos",
+    "gestionContrats": "Gestión de Contratos",
+    "sourcingStrategique": "Sourcing Estratégico",
+    "gestionRisques": "Gestión de Riesgos",
+    "gestionTalents": "Gestión del Talento",
+    "achatsResponsables": "Compras Responsables",
+    "digitalisationAchats": "Digitalización de Compras",
+    "gestionPerformance": "Gestión del Rendimiento"
+  },
+  "priorities": {
+    "urgent": "Urgente",
+    "important": "Importante",
+    "recommended": "Recomendado"
   },
   "common": {
     "language": "Idioma",

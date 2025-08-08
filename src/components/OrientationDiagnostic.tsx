@@ -73,7 +73,21 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
 
   const analyzeResults = async () => {
     setIsAnalyzing(true);
-    
+    const persist = (finalResult: DiagnosticResult) => {
+      try {
+        const existing = JSON.parse(localStorage.getItem('mirihi_diagnostics') || '[]');
+        existing.push({
+          type: 'orientation',
+          savedAt: new Date().toISOString(),
+          overallPercentage: finalResult.overallPercentage,
+            overallLevel: finalResult.overallLevel,
+          result: finalResult
+        });
+        localStorage.setItem('mirihi_diagnostics', JSON.stringify(existing));
+      } catch {
+        // silencieux
+      }
+    };
     try {
       const basicResult = engine.getResults();
       
@@ -109,16 +123,18 @@ export default function OrientationDiagnostic({ onComplete, autoStart = false }:
         };
         
         setResult(enhancedResult);
+        persist(enhancedResult);
         onComplete?.(enhancedResult);
       } else {
-        // Fallback si l'API échoue
         setResult(basicResult);
+        persist(basicResult);
         onComplete?.(basicResult);
       }
     } catch (error) {
       console.error('Erreur lors de l\'analyse:', error);
       const basicResult = engine.getResults();
       setResult(basicResult);
+      persist(basicResult);
       onComplete?.(basicResult);
     } finally {
       setIsAnalyzing(false);
@@ -370,8 +386,8 @@ function ResultsDisplay({ result, onRestart }: ResultsDisplayProps) {
                 <div className="text-sm text-gray-600">{t('diagnostic.scoreGlobal')}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-800 capitalize">
-                  {result.overallLevel}
+                <div className="text-2xl font-bold text-gray-800">
+                  {t(`levels.${result.overallLevel}`) || result.overallLevel}
                 </div>
                 <div className="text-sm text-gray-600">{t('diagnostic.maturityLevel')}</div>
               </div>
@@ -560,13 +576,13 @@ function OverviewTab({ result, setActiveTab }: {
               <div className="flex justify-between items-center mb-2">
                 <h4 className="font-semibold text-gray-800">{category}</h4>
                 <div className="flex items-center space-x-2">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     data.percentage >= 80 ? 'bg-green-100 text-green-800' :
                     data.percentage >= 60 ? 'bg-yellow-100 text-yellow-800' :
                     data.percentage >= 40 ? 'bg-orange-100 text-orange-800' :
                     'bg-red-100 text-red-800'
                   }`}>
-                    {data.level}
+                    {t(`levels.${data.level}`) || data.level}
                   </span>
                   <span className="font-bold text-gray-700">{data.percentage}%</span>
                 </div>
@@ -748,12 +764,12 @@ function RecommendationsTab({ result }: { result: DiagnosticResult }) {
               <div key={index} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between mb-3">
                   <h4 className="text-lg font-semibold text-gray-800">{diagnostic.name}</h4>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                     diagnostic.priority === 'urgent' ? 'bg-red-100 text-red-800' :
                     diagnostic.priority === 'important' ? 'bg-orange-100 text-orange-800' :
                     'bg-blue-100 text-blue-800'
                   }`}>
-                    {diagnostic.priority}
+                    {t(`priorities.${diagnostic.priority}`) || diagnostic.priority}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4">{diagnostic.reason}</p>
