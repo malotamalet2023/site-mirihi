@@ -1,9 +1,10 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-type Props = { params: { locale: string } };
+type Props = { params: Promise<{ locale: string }> };
 
 export default async function ResourcesPage({ params }: Props) {
-  const { locale } = params;
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale });
 
   return (

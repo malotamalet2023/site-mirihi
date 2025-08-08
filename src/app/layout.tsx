@@ -5,10 +5,10 @@ export const metadata: Metadata = {
   description: 'Votre partenaire en diagnostic et amélioration des processus d\'achat. Outils avancés pour optimiser vos performances.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return children;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="fr">
+      <body>{children}</body>
+    </html>
+  );
 }

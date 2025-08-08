@@ -2,7 +2,7 @@ import '../globals.css';
 import SimpleHeader from '@/components/SimpleHeader';
 import { locales } from '@/lib/i18n-config';
 import { NextIntlClientProvider } from 'next-intl';
-import { notFound } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -17,25 +17,9 @@ export default async function LocaleLayout({
   children,
   params
 }: Props) {
-  const { locale } = await params; // Await requis selon API actuelle
-  if (!locales.includes(locale as any)) {
-    console.error('[i18n] Locale invalide:', locale);
-    notFound();
-  }
-
-  let messages;
-  try {
-    console.log('[i18n] Chargement messages pour', locale);
-    messages = (await import(`@/messages/${locale}.json`)).default;
-    if (!messages || Object.keys(messages).length === 0) {
-      console.error('[i18n] Fichier de messages vide pour', locale);
-      notFound();
-    }
-  } catch (e) {
-    console.error('[i18n] Erreur import messages', locale, e);
-    notFound();
-  }
-
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const messages = (await import(`@/messages/${locale}.json`)).default;
   return (
     <html lang={locale}>
       <body className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">

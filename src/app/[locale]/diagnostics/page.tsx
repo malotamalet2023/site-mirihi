@@ -1,12 +1,13 @@
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export default async function DiagnosticsPage({ params }: Props) {
-  const { locale } = params;
+  const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale });
 
   const modules = [
